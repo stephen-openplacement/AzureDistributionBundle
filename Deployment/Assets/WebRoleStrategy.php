@@ -11,7 +11,7 @@
  * to kontakt@beberlei.de so I can send you a copy immediately.
  */
 
-namespace WindowsAzureDistributionBundle\Deployment\Assets;
+namespace WindowsAzure\DistributionBundle\Deployment\Assets;
 
 /**
  * Serve assets from the webrole.
