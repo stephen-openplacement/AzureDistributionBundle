@@ -59,6 +59,23 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sqlsrv:server=localhost;Database=db', $args[0]);
     }
 
+    public function testBlobStorages()
+    {
+        $config = array(
+            'blob_storage' => array(
+                'test' => array('account' => 'test', 'key' => 'test', 'stream' => 'teststream'),
+                'test2' => array('account' => 'test2', 'key' => 'test2', 'stream' => 'teststream2'),
+            )
+        );
+
+        $container = $this->createContainer($config);
+        $def = $container->findDefinition('windows_azure_distribution.storage_registry');
+
+        $calls = $def->getMethodCalls();
+
+        $this->assertEquals(2, count($calls));
+    }
+
     public function createContainer(array $config = array())
     {
         $container = new ContainerBuilder(new ParameterBag(array(

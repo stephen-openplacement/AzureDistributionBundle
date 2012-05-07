@@ -65,7 +65,7 @@ class ServiceDefinition
         );
         if (isset($roleFiles['exclude'])) {
             $this->roleFiles['exclude'] = array_merge($this->roleFiles['exclude'], $roleFiles['exclude']);
-        }
+
         if (isset($roleFiles['include'])) {
             foreach ($roleFiles['include'] as $include) {
                 $key = array_search($include, $this->roleFiles['exclude']);
@@ -82,6 +82,20 @@ class ServiceDefinition
     public function getPath()
     {
         return $this->serviceDefinitionFile;
+    }
+
+    public function getNewBuildNumber()
+    {
+        $dir = dirname($this->getPath());
+        $buildFile = $dir . DIRECTORY_SEPARATOR . "build.number";
+        if (!file_exists($buildFile)) {
+            file_put_contents($buildFile, "0");
+        }
+        $buildNumber = (int)file_get_contents($buildFile);
+        $buildNumber++;
+        file_put_contents($buildFile, (string)$buildNumber);
+
+        return $buildNumber;
     }
 
     public function getWebRoleNames()

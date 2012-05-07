@@ -37,17 +37,52 @@ class WindowsAzureDistributionExtension extends Extension
 
         $container->setParameter('windows_azure_distribution.config.deployment', $config['deployment']);
 
-        if (isset($config['session'])) {
-            $this->loadSession($config['session'], $container);
-        }
+        $this->loadSession($config, $container);
+        $this->loadAsset($config['assets'], $container);
+        $this->loadStorages($config, $container);
 
-        if (isset($config['diagnostics'])) {
+        /*if (isset($config['diagnostics'])) {
             $container->setParameter('windows_azure_distribution.config.diagnostics.storage', $config['diagnostics']);
+        }*/
+    }
+
+    protected function loadAsset($assetConfig, $container)
+    {
+        switch ($assetConfig['type']) {
+            case 'webrole':
+                break;
+            case 'blob':
+                break;
+            case 'service':
+                break;
         }
     }
 
-    protected function loadSession($sessionConfig, $container)
+    protected function loadStorages($config, $container)
     {
+        if ( ! isset($config['blob_storage'])) {
+            return;
+        }
+
+        $def = $container->getDefinition('windows_azure_distribution.storage_registry');
+        foreach ($config['blob_storage'] as $name => $storage) {
+            $def->addMethodCall('registerAccount', array(
+                $name,
+                $storage['account'],
+                $storage['key'],
+                $storage['stream']
+            ));
+        }
+    }
+
+    protected function loadSession($config, $container)
+    {
+        if ( ! isset($config['session'])) {
+            return;
+        }
+
+        $sessionConfig = $config['session'];
+
         switch($sessionConfig['type']) {
             case 'pdo':
                 if (!isset($sessionConfig['database'])) {

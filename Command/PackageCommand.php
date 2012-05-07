@@ -78,6 +78,13 @@ class PackageCommand extends ContainerAwareCommand
             }
         }
 
+        $buildNumber = $serviceDefinition->getNewBuildNumber();
+        // TODO: Config
+        $webRoleStrategy = new WebRoleStrategy($this->getContainer());
+        foreach ($serviceDefinition->getPhysicalDirectories() as $dir) {
+            $webRoleStrategy->deploy($dir, $buildNumber);
+        }
+
         if ( ! $input->getOption('skip-role-file-generation')) {
             $output->writeln('Starting to compile role files for each physical directory.');
             $s = microtime(true);

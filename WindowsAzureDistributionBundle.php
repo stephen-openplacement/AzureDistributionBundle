@@ -17,5 +17,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class WindowsAzureDistributionBundle extends Bundle
 {
+    public function boot()
+    {
+        // instantiate storage registry, will lead to registration of stream wrappers.
+        $storageRegistry = $this->container->get('windows_azure_distribution.storage_registry');
+    }
 }
 
