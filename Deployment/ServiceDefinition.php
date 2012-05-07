@@ -65,6 +65,7 @@ class ServiceDefinition
         );
         if (isset($roleFiles['exclude'])) {
             $this->roleFiles['exclude'] = array_merge($this->roleFiles['exclude'], $roleFiles['exclude']);
+        }
 
         if (isset($roleFiles['include'])) {
             foreach ($roleFiles['include'] as $include) {
