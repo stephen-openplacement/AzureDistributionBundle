@@ -5,6 +5,13 @@ imports:
     - { resource: config_prod.yml }
     - { resource: parameters_azure.yml }
 
+framework:
+    templating:
+        # Enter Windows Azure Storage Account Urls if you don't want to serve assets from web-roles.
+        #- assets_base_urls: { http: [], ssl: [] }
+        assets_version: %assets_azure_version%
+        assets_version_format: "v%%2$s/%%1$s"
+
 windows_azure_distribution:
     session:
         type: %session_type%

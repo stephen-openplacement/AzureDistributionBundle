@@ -20,6 +20,16 @@ class WebRoleStrategy extends AssetStrategy
 {
     public function deploy($documentRoot, $buildNumber)
     {
+        // cleanup webdirectory, otherwise it gets huge.
+        $assetPath = $documentRoot . DIRECTORY_SEPARATOR . "v%d";
+        $filesystem = $this->container->get('filesystem');
+        for ($i = $buildNumber; $i > 0; $i--) {
+            $oldAssetPath = sprintf($assetPath, $i);
+            if (file_exists($oldAssetPath)) {
+                $filesystem->remove($oldAssetPath);
+            }
+        }
+
         $this->moveTo($documentRoot . DIRECTORY_SEPARATOR . "v". $buildNumber);
     }
 }

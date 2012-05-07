@@ -70,7 +70,9 @@ class PackageCommand extends ContainerAwareCommand
             throw new \RuntimeException("Output-directory is not writable!");
         }
 
-        $outputFile = $outputDir . "/azure.cspkg";
+        $buildNumber = $serviceDefinition->getNewBuildNumber();
+
+        $outputFile = $outputDir . "/azure-" . $buildNumber . ".cspkg";
         if (file_exists($outputFile)) {
             if (is_file($outputFile)) {
                 unlink($outputFile);
@@ -79,9 +81,10 @@ class PackageCommand extends ContainerAwareCommand
             }
         }
 
-        $buildNumber = $serviceDefinition->getNewBuildNumber();
-        // TODO: Config
-        $webRoleStrategy = new WebRoleStrategy($this->getContainer());
+        $output->writeln('Compiling assets for build ' . $buildNumber);
+        $webRoleStrategy = $this->getContainer()->get('windows_azure_distribution.assets');
+        var_dump(get_class($webRoleStrategy));
+        var_dump(get_class($webRoleStrategy));
         foreach ($serviceDefinition->getPhysicalDirectories() as $dir) {
             $webRoleStrategy->deploy($dir, $buildNumber);
         }

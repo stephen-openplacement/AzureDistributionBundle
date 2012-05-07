@@ -16,6 +16,8 @@
         <parameter key="windows_azure_distribution.session_storage.pdo.class">WindowsAzure\DistributionBundle\HttpFoundation\SessionStorage\PdoSqlSrvSessionStorage</parameter>
         <parameter key="windows_azure_distribution.cache_warmer.dbtable.class">WindowsAzure\DistributionBundle\CacheWarmer\DbSessionTable</parameter>
         <parameter key="windows_azure_distribution.storage_registry.class">Beberlei\AzureBlobStorage\StorageRegistry</parameter>
+        <parameter key="windows_azure_distribution.assets.webrole.class">WindowsAzure\DistributionBundle\Deployment\Assets\WebRoleStrategy</parameter>
+        <parameter key="windows_azure_distribution.assets.blob.class">WindowsAzure\DistributionBundle\Deployment\Assets\BlobStrategy</parameter>
     </parameters>
 
     <services>
@@ -31,6 +33,13 @@
         </service>
 
         <service id="windows_azure_distribution.storage_registry" class="%windows_azure_distribution.storage_registry.class%">
+        </service>
+
+        <service id="windows_azure_distribution.assets.webrole" class="%windows_azure_distribution.assets.webrole.class%">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="windows_azure_distribution.assets.blob" class="%windows_azure_distribution.assets.blob.class%">
+            <argument type="service" id="service_container" />
         </service>
     </services>
 </container>
