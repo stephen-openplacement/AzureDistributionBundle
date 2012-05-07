@@ -157,10 +157,11 @@ class ServiceDefinition
         $dirs = array();
         foreach ($nodes as $node) {
             $sites = $node->getElementsByTagName('Site');
+
             if (count($sites)) {
                 $dirs[$node->getAttribute('name')] = realpath(
-                    dirname($this->serviceDefinitionFile) .
-                    $sites->item(0)->getAttribute('physicalDirectory')
+                    dirname($this->serviceDefinitionFile) . DIRECTORY_SEPARATOR .
+                    rtrim($sites->item(0)->getAttribute('physicalDirectory'), "\\")
                 );
             }
         }
