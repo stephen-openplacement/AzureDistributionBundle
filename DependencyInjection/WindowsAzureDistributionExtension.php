@@ -40,10 +40,53 @@ class WindowsAzureDistributionExtension extends Extension
         $this->loadSession($config, $container);
         $this->loadAsset($config['assets'], $container);
         $this->loadStorages($config, $container);
+        $this->loadTable($config, $container);
 
         /*if (isset($config['diagnostics'])) {
             $container->setParameter('windows_azure_distribution.config.diagnostics.storage', $config['diagnostics']);
         }*/
+    }
+
+    protected function loadTable($config, $container)
+    {
+        if (!isset($config['table'])) {
+            return;
+        }
+
+        if ( ! class_exists('Doctrine\KeyValueStore\EntityManager')) {
+            return;
+        }
+
+        $driver = new Definition('Doctrine\KeyValueStore\Mapping\AnnotationDriver');
+        $driver->addArgument(new Reference('annotation_reader'));
+        $container->setDefinition('windows_azure_distribution.table.driver', $driver);
+
+        $cache = new Definition('Doctrine\Common\Cache\ArrayCache');
+        $container->setDefinition('windows_azure_distribution.table.cache', $cache);
+
+        $sharedKey = new Definition('Doctrine\KeyValueStore\Storage\WindowsAzureTable\SharedKeyLiteAuthorization');
+        $sharedKey->setArguments(array($config['table']['account'], $config['table']['key']));
+        $container->setDefinition('windows_azure_distribution.table.auth', $sharedKey);
+
+        $socketClient = new Definition('Doctrine\KeyValueStore\Http\SocketClient');
+        $container->setDefinition('windows_azure_distribution.table.http_client', $socketClient);
+
+        $storage = new Definition('Doctrine\KeyValueStore\Storage\WindowsAzureTableStorage');
+        $storage->setArguments(array(
+            new Reference('windows_azure_distribution.table.http_client'),
+            $config['table']['account'],
+            new Reference('windows_azure_distribution.table.auth')
+        ));
+        $container->setDefinition('windows_azure_distribution.table.storage', $storage);
+
+        $em = new Definition('Doctrine\KeyValueStore\EntityManager');
+        $em->setArguments(array(
+            new Reference('windows_azure_distribution.table.storage'),
+            new Reference('windows_azure_distribution.table.cache'),
+            new Reference('windows_azure_distribution.table.driver'),
+        ));
+
+        $container->setDefinition('windows_azure_distribution.table.manager', $em);
     }
 
     protected function loadAsset($assetConfig, $container)
@@ -71,6 +114,11 @@ class WindowsAzureDistributionExtension extends Extension
     protected function loadStorages($config, $container)
     {
         if ( ! isset($config['blob_storage'])) {
+            return;
+        }
+
+        if ( ! class_exists('Beberlei\AzureBlobStorage\StorageRegistry')) {
+            $container->removeDefinition('windows_azure_distribution.storage_registry');
             return;
         }
 

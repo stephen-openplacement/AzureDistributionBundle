@@ -23,7 +23,7 @@ class BlobStrategy extends AssetStrategy
     public function deploy($documentRoot, $buildNumber)
     {
         $client = new BlobClient(
-            sprintf('http://%s.blob.windows.net', $this->container->getParameter('windows_azure_distribution.assets.account_name')),
+            sprintf('http://%s.blob.core.windows.net', $this->container->getParameter('windows_azure_distribution.assets.account_name')),
             $this->container->getParameter('windows_azure_distribution.assets.account_name'),
             $this->container->getParameter('windows_azure_distribution.assets.account_key')
         );

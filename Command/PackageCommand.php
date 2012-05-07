@@ -83,8 +83,6 @@ class PackageCommand extends ContainerAwareCommand
 
         $output->writeln('Compiling assets for build ' . $buildNumber);
         $webRoleStrategy = $this->getContainer()->get('windows_azure_distribution.assets');
-        var_dump(get_class($webRoleStrategy));
-        var_dump(get_class($webRoleStrategy));
         foreach ($serviceDefinition->getPhysicalDirectories() as $dir) {
             $webRoleStrategy->deploy($dir, $buildNumber);
         }

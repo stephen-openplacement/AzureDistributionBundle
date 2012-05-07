@@ -19,6 +19,12 @@ class WindowsAzureDistributionBundle extends Bundle
 {
     public function boot()
     {
+        parent::boot();
+
+        if ( ! $this->container->has('windows_azure_distribution.storage_registry')) {
+            return;
+        }
+
         // instantiate storage registry, will lead to registration of stream wrappers.
         $storageRegistry = $this->container->get('windows_azure_distribution.storage_registry');
     }

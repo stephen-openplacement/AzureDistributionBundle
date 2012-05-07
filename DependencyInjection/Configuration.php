@@ -99,6 +99,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('table')
+                    ->children()
+                        ->scalarNode('account')->isRequired()->end()
+                        ->scalarNode('key')->isRequired()->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
