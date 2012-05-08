@@ -4,7 +4,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 ## Using a downloadable Symfony version
 
-1. Go to symfony.com/download and download the latest version with vendors. (Currently http://symfony.com/download?v=Symfony_Standard_Vendors_2.0.11.zip)
+1. Go to symfony.com/download and download the latest version with vendors. (Currently http://symfony.com/download?v=Symfony_Standard_Vendors_2.0.13.zip)
 
 2. Unzip the archive into a directory.
 
@@ -66,7 +66,7 @@ The file is called windows-azure-distribution-with-dependencies-v*.zip where the
 
     with the following line (careful with indention and make sure to use spaces, not tabs): 
 
-        - { resource: ../../src/WindowsAzure/TaskDemoBundle/Resources/config/security.yml }
+        - { resource: ../../vendor/azure/WindowsAzure/TaskDemoBundle/Resources/config/security.yml }
 
 4. Register routes in app\config\routing.yml
 
@@ -76,4 +76,4 @@ The file is called windows-azure-distribution-with-dependencies-v*.zip where the
             prefix:   /
 
 
-5. Import the contents of the "schema.sql" from src\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
+5. Import the contents of the "schema.sql" from vendor\azure\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
