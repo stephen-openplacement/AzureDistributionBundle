@@ -41,10 +41,20 @@ class WindowsAzureDistributionExtension extends Extension
         $this->loadAsset($config['assets'], $container);
         $this->loadStorages($config, $container);
         $this->loadTable($config, $container);
+        $this->loadSharding($config, $container);
 
         /*if (isset($config['diagnostics'])) {
             $container->setParameter('windows_azure_distribution.config.diagnostics.storage', $config['diagnostics']);
         }*/
+    }
+
+    protected function loadSharding($config, $container)
+    {
+        if ( ! isset($config['federations'])) {
+            return;
+        }
+
+        $container->setParameter('windows_azure_distribution.sharding', $config['federations']);
     }
 
     protected function loadTable($config, $container)

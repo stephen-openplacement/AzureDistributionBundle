@@ -30,16 +30,20 @@ class GenerateVendorRolesFileCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('windowsazure:generate:vendor-roles-file')
+            ->setName('windowsazure:generate-vendor-roles-file')
             ->setDescription('Generates the roles file of your projects vendor directory for Windows Azure deployments')
-            ->addArgument('vendor-dir', InputArgument::REQUIRED, 'Your projects vendor dir')
+            ->addArgument('vendor-dir', InputArgument::OPTIONAL, 'Your projects vendor dir')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>Generating Windows Azure role file</info>');
+        $vendorDir = $input->getArgument('vendor-dir');
+        if ( !$vendorDir) {
+            $vendorDir = getcwd() . DIRECTORY_SEPARATOR . "vendor";
+        }
 
-        VendorRoleFilesListener::generateVendorRolesFile($input->getArgument('vendor-dir'));
+        VendorRoleFilesListener::generateVendorRolesFile($vendorDir);
     }
 }

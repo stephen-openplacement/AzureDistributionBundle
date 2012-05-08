@@ -105,6 +105,17 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('key')->isRequired()->end()
                     ->end()
                 ->end()
+                ->arrayNode('federations')
+                    ->useAttributeAsKey('name')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('federationName')->isRequired()->end()
+                            ->scalarNode('distributionKey')->isRequired()->end()
+                            ->scalarNode('distributionType')->isRequired()->end()
+                            ->scalarNode('filteringEnabled')->defaultValue(false)->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

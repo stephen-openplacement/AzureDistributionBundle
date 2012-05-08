@@ -14,6 +14,8 @@
 namespace WindowsAzure\DistributionBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use WindowsAzure\DistributionBundle\DependencyInjection\CompilerPass\ShardingPass;
 
 class WindowsAzureDistributionBundle extends Bundle
 {
@@ -28,5 +30,13 @@ class WindowsAzureDistributionBundle extends Bundle
         // instantiate storage registry, will lead to registration of stream wrappers.
         $storageRegistry = $this->container->get('windows_azure_distribution.storage_registry');
     }
+
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new ShardingPass());
+    }
+
 }
 
