@@ -40,7 +40,7 @@ class ShardingPass implements CompilerPassInterface
     private function registerShard($connectionName, $options, $container)
     {
         $id      = 'doctrine.dbal.' . $connectionName . '_connection';
-        $shardId = 'windows_azure_task_demo.' . $connectionName . '_shard_manager';
+        $shardId = 'windows_azure_distribution.' . $connectionName . '_shard_manager';
 
         if ( ! $container->hasDefinition($id)) {
             throw new \InvalidArgumentException("No connection " . $connectionName . " found for federations.");
@@ -67,7 +67,7 @@ class ShardingPass implements CompilerPassInterface
         $container->setDefinition($shardId, $shardDef);
 
         if ($connection == 'default') {
-            $container->setAlias('windows_azure_task_demo.shard_manager', $shardId);
+            $container->setAlias('windows_azure_distribution.shard_manager', $shardId);
         }
     }
 }
