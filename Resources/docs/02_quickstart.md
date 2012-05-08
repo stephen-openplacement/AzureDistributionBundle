@@ -18,8 +18,8 @@ The file is called windows-azure-distribution-with-dependencies-v*.zip where the
 
 6. Modify the app/autoload.php file to include the following lines in the array inside the `registerNamespaces()` method:
 
-        'WindowsAzure\\DistributionBundle'  => __DIR__ . '/../vendor/azure/azure-distribution-bundle/',
-        'WindowsAzure\\TaskDemoBundle'      => __DIR__ . '/../vendor/azure/azure-task-demo-bundle/',
+        'WindowsAzure\\DistributionBundle'  => __DIR__ . '/../vendor/azure/',
+        'WindowsAzure\\TaskDemoBundle'      => __DIR__ . '/../vendor/azure/',
         'Beberlei\\AzureBlobStorage'        => __DIR__ . '/../vendor/azure/azure-blob-storage/lib/',
         'Doctrine\\Shards'                  => __DIR__ . '/../vendor/azure/doctrine-shards/lib/',
         'Doctrine\\KeyValueStore'           => __DIR__ . '/../vendor/azure/doctrine-keyvaluestore/lib/',
@@ -37,16 +37,14 @@ The file is called windows-azure-distribution-with-dependencies-v*.zip where the
 
 11. Call `php app\console windowsazure:package`
 
-12. Deploy the `build\ServiceDefinition.cscfg` and `build\azure.cspkg` using the management console
+12. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console
 
 13. Browse to http://appid.cloudapp.net/ - http://appid.cloudapp.net/hello/world or http://appid.cloudapp.net/tasks
 
 ## Installing the Task Demo Bundle
 
-1. Downlad from https://github.com/beberlei/AzureTaskDemoBundle
-2. Unzip files into src\WindowsAzure\TaskDemoBundle
-3. Add `new WindowsAzure\TaskDemoBundle\WindowsAzureTaskDemoBundle()` into the `$bundles` array in `app\AppKernel.php`
-4. Configure the database by modifying `app\config\azure_parameters.yml`.
+1. Add `new WindowsAzure\TaskDemoBundle\WindowsAzureTaskDemoBundle()` into the `$bundles` array in `app\AppKernel.php`
+2. Configure the database by modifying `app\config\azure_parameters.yml`.
 
     An example of the parameters.yml looks like:
 
@@ -60,7 +58,7 @@ The file is called windows-azure-distribution-with-dependencies-v*.zip where the
             database_password: PWD
             database_name: DBNAME
 
-5. Configure Security
+3. Configure Security
 
     Open `app\config\security.yml` and exchange the line:
 
@@ -70,7 +68,7 @@ The file is called windows-azure-distribution-with-dependencies-v*.zip where the
 
         - { resource: ../../src/WindowsAzure/TaskDemoBundle/Resources/config/security.yml }
 
-6. Register routes in app\config\routing.yml
+4. Register routes in app\config\routing.yml
 
         WindowsAzureTaskDemoBundle:
             resource: "@WindowsAzureTaskDemoBundle/Controller/"
@@ -78,4 +76,4 @@ The file is called windows-azure-distribution-with-dependencies-v*.zip where the
             prefix:   /
 
 
-7. Import the contents of the "schema.sql" from src\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
+5. Import the contents of the "schema.sql" from src\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.

@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<project name="Windows Azure DistributionBundle" default="build" basedir=".">
+    <property name="azure_distribution_bundle_version" value="v1.0" />
+    <property name="azure_blob_version" value="v1.0" />
+    <property name="kvs_version" value="v0.1" />
+    <property name="shards_version" value="v1.0" />
+    <property name="taskdemo_version" value="v1.1" />
+
+    <target name="build">
+        <delete dir="build" />
+        <mkdir dir="build" />
+        <mkdir dir="build/azure-distribution-bundle" />
+
+        <get src="https://github.com/beberlei/AzureDistributionBundle/zipball/${azure_distribution_bundle_version}"
+            dest="build/azure-distribution-bundle.zip"/>
+        <unzip src="build/azure-distribution-bundle.zip" dest="build/azure-distribution-bundle/WindowsAzure/DistributionBundle" />
+
+        <get src="https://github.com/beberlei/azure-blob-storage/zipball/${azure_blob_version}"
+            dest="build/azure-blob-storage.zip" />
+        <unzip src="build/azure-blob-storage.zip" dest="build/azure-distribution-bundle" />
+
+        <get src="https://github.com/doctrine/KeyValueStore/zipball/${kvs_version}"
+            dest="build/key-value-store.zip" />
+        <unzip src="build/key-value-store.zip" dest="build/azure-distribution-bundle" />
+
+        <get src="https://github.com/doctrine/shards/zipball/${kvs_version}"
+            dest="build/shards.zip" />
+        <unzip src="build/shards.zip" dest="build/azure-distribution-bundle" />
+
+        <get src="https://github.com/beberlei/AzureTaskDemoBundle/zipball/${taskdemo_version}"
+            dest="build/azure-taskdemo-bundle.zip"/>
+        <unzip src="build/azure-taskdemo-bundle.zip" dest="build/azure-distribution-bundle/WindowsAzure/TaskDemoBundle" />
+    </target>
+</project>
