@@ -10,11 +10,19 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 3. Create a new subdirectory vendor\bundles\WindowsAzure\DistributionBundle
 
-4. Download the WindowsAzure Distribution Bundle from https://github.com/beberlei/AzureDistributionBundle
+4. Download the WindowsAzure Distribution Bundle (+dependencies) from https://github.com/beberlei/AzureDistributionBundle/downloads
 
-5. Unzip the bundle and copy the contents into the vendor/bundles/WindowsAzure/DistributionBundle folder
+The file is called windows-azure-distribution-with-dependencies-v*.zip where the star can be replaced by some version. Pick the biggest version.
 
-6. Modify the app/autoload.php file to include the line `'WindowsAzure\\DistributionBundle' => __DIR__ . '/../vendor/bundles'` in the array inside the `registerNamespaces()` method.
+5. Unzip the file and copy the contents into the vendor/azure folder
+
+6. Modify the app/autoload.php file to include the following lines in the array inside the `registerNamespaces()` method:
+
+        'WindowsAzure\\DistributionBundle'  => __DIR__ . '/../vendor/azure/azure-distribution-bundle/',
+        'WindowsAzure\\TaskDemoBundle'      => __DIR__ . '/../vendor/azure/azure-task-demo-bundle/',
+        'Beberlei\\AzureBlobStorage'        => __DIR__ . '/../vendor/azure/azure-blob-storage/lib/',
+        'Doctrine\\Shards'                  => __DIR__ . '/../vendor/azure/doctrine-shards/lib/',
+        'Doctrine\\KeyValueStore'           => __DIR__ . '/../vendor/azure/doctrine-keyvaluestore/lib/',
 
 7. Modify the app/AppKernel.php to include `new WindowsAzure\DistributionBundle\WindowsAzureDistributionBundle()` in the $bundles array. Also replace the `extends Kernel` with `extends AzureKernel` and add a new import statement to the top of the file `use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel;`. Details of this step are described in the README.md of this project under the topic "Azure Kernel".
 
