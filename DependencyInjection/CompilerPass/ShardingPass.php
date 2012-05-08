@@ -66,7 +66,7 @@ class ShardingPass implements CompilerPassInterface
         $shardDef->addArgument(new Reference($id));
         $container->setDefinition($shardId, $shardDef);
 
-        if ($connection == 'default') {
+        if ($connectionName == 'default') {
             $container->setAlias('windows_azure_distribution.shard_manager', $shardId);
         }
     }
