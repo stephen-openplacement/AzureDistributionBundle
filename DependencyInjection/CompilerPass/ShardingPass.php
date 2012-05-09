@@ -59,6 +59,7 @@ class ShardingPass implements CompilerPassInterface
             'distributionType' => $options['distributionType'],
             'filteringEnabled' => $options['filteringEnabled'],
         );
+        $args[0]['MultipleActiveResultSets'] = false;
 
         $def->setArguments($args);
 
