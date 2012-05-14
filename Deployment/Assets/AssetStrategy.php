@@ -37,11 +37,16 @@ abstract class AssetStrategy
      * The selected strategy depends on the configuration of the site and could
      * be either local to the web role or blob storage for example.
      */
-    abstract function deploy($documentRoot, $buildNumber);
+    abstract public function deploy($documentRoot, $buildNumber);
+
+    /**
+     * @return Filesystem
+     */
+    abstract protected function getFilesystem();
 
     protected function moveTo($targetArg)
     {
-        $filesystem = $this->container->get('filesystem');
+        $filesystem = $this->getFilesystem();
 
         // Create the bundles directory otherwise symlink will fail.
         $filesystem->mkdir($targetArg.'/bundles/', 0777);

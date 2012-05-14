@@ -32,5 +32,10 @@ class WebRoleStrategy extends AssetStrategy
 
         $this->moveTo($documentRoot . DIRECTORY_SEPARATOR . "v". $buildNumber);
     }
+
+    protected function getFilesystem()
+    {
+        return $this->container->get('filesystem');
+    }
 }
 

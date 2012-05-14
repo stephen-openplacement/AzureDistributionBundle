@@ -14,6 +14,7 @@
 namespace WindowsAzure\DistributionBundle\Deployment\Assets;
 
 use Beberlei\AzureBlobStorage\BlobClient;
+use WindowsAzure\DistributionBundle\Filesystem\AzureFilesystem;
 
 /**
  * Serve assets from blob storage
@@ -30,6 +31,11 @@ class BlobStrategy extends AssetStrategy
         $client->registerStreamWrapper('azureassets');
 
         $this->moveTo('azureassets://v' . $buildNumber);
+    }
+
+    protected function getFilesystem()
+    {
+        return new AzureFilesystem();
     }
 }
 
