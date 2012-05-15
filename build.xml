@@ -10,6 +10,7 @@
         <exec output="sharding.markdown" executable="git"><arg line="show master:Resources/docs/06_sharding.md" /></exec>
         <exec output="assets.markdown" executable="git"><arg line="show master:Resources/docs/07_assets.md" /></exec>
         <exec executable="jekyll"><arg value="--pygments" /></exec>
+        <exec executable="git"><arg value="commit" /><arg value="-m"><arg value="Synchronize docs from master branch" /></exec>
     </target>
 </project>
 
