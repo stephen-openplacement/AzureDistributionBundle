@@ -9,10 +9,6 @@ Prerequisites for this bundle are a Windows development machine with the Windows
 
 You can either install the SDK through [Web Platform Installer](http://azurephp.interoperabilitybridges.com/articles/setup-the-windows-azure-development-environment-automatically-with-the-microsoft-web-platform-installer) or all [dependencies manually](http://azurephp.interoperabilitybridges.com/articles/setup-the-windows-azure-development-environment-manually).
 
-## Download
-
-Grab the ZIP Download from Github https://github.com/beberlei/AzureDistributionBundle and unzip it into "vendor/bundles/WindowsAzure/DistributionBundle". Proceed with section "Autoloading"
-
 ## Composer
 
 For [Composer](http://www.packagist.org)-based application, add this package to your composer.json:
@@ -33,6 +29,10 @@ For a 'bin\vendors' based application add the Git path to your 'deps' file.
 
 Then call "php bin\vendors install" or "php bin\vendors update" to install this package.Proceed with section "Autoloading"
 
+## Download
+
+See the [quickstart](quickstart.html) for a way to download the whole code into your Symfony project.
+
 ## Autoloading
 
 If you are not using Composer you have to manually register autoloading in 'app/autoload.php':
@@ -49,9 +49,9 @@ The Azure kernel can be used to set the temporary and cache directories to `sys_
 
     use Symfony\Component\HttpKernel\Kernel;
     use Symfony\Component\Config\Loader\LoaderInterface;
-    use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel;
+    use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel; // change use
 
-    class AppKernel extends AzureKernel
+    class AppKernel extends AzureKernel // change kernel here
     {
         $bundles = array(
             // ...

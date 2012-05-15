@@ -46,3 +46,14 @@ controllers (or any services) using the storage registry service:
         }
     }
 
+# Filesystem
+
+Symfony ships with a filesystem API that is very convenient to use for some mass-operations.
+Because some parts of it are incompatible with Azure Streams you can use a subclass of it
+provided by this bundle:
+
+    <?php
+
+    $filesystem = new \WindowsAzure\DistributionBundle\Filesystem\AzureFilesystem;
+    $filesystem->mirror("dir/", "azure://dir");
+
