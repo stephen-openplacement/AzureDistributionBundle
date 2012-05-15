@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="WindowsAzureDistributionBundle Docs" basedir="." default="build">
     <target name="build">
+        <exec output="overview.markdown" executable="git"><arg line="show master:Resources/docs/01_getting_started.md" /></exec>
         <exec output="quickstart.markdown" executable="git"><arg line="show master:Resources/docs/02_quickstart.md" /></exec>
         <exec output="session.markdown" executable="git"><arg line="show master:Resources/docs/03_session.md" /></exec>
         <exec output="azure_env.markdown" executable="git"><arg line="show master:Resources/docs/04_azure_environment.md" /></exec>
