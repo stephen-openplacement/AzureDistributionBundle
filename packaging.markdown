@@ -1,3 +1,8 @@
+---
+title: Packaging
+layout: default
+---
+
 # Packaging
 
 Before you start generating Azure packages you have to create the basic infrastructure. This bundle will create a folder `app/azure` with a bunch of configuration and resource files that are necessary for deployment. To initialize this infrastructure call:
