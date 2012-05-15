@@ -1,9 +1,9 @@
 ---
 layout: default
-title: Getting Started
+title: Overview
 ---
 
-## Features
+# Features
 
 Cloud-Services put constraints on how an application is allowed to run on their hosted services. This is done for security and scalability reasons. The default Symfony Sandbox won't run on Azure without some slight changes. The Azure deployment related tasks will be solved by this bundle:
 
@@ -15,83 +15,18 @@ Cloud-Services put constraints on how an application is allowed to run on their 
    * PDO (Done)
    * Azure Table
 * Specific 'azure' environment that is inherits from prod. (Done)
-* Deploying assets to Azure Blob Storage
+* Deploying assets to Azure Blob Storage (Done)
 * Aid for generation remote desktop usables instances and other common configuration options for ServiceDefinition.csdef and ServiceConfiguration.cscfg
 * Wrapper API for access to Azure Globals such as RoleId etc.
 * Logging to a central server/blob storage.
 * Diagnostics
-* Startup installation of vendors through Composer
 
 Why is this Symfony specific? Generic deployment of PHP applications on Azure requires alot more work, because you can't rely on the conventions of the framework. This bundle makes the Azure experience very smooth, no details about Azure deployment are necessary to get started.
 
-## Installation
-
-Prerequisites for this bundle are a Windows development machine with the Windows Azure SDK installed. You don't need the PHP SDK to run this bundle.
-
-You can either install the SDK through [Web Platform Installer](http://azurephp.interoperabilitybridges.com/articles/setup-the-windows-azure-development-environment-automatically-with-the-microsoft-web-platform-installer) or all [dependencies manually](http://azurephp.interoperabilitybridges.com/articles/setup-the-windows-azure-development-environment-manually).
-
-### Download
-
-Grab the ZIP Download from Github https://github.com/beberlei/AzureDistributionBundle and unzip it into "vendor/bundles/WindowsAzure/DistributionBundle". Proceed with section "Autoloading"
-
-### Composer
-
-For [Composer](http://www.packagist.org)-based application, add this package to your composer.json:
-
-    ```javascript
-    {
-        "require": {
-            "beberlei/azure-distribution-bundle": "*"
-        }
-    }
-    ```
-
-### bin\vendors and deps
-
-For a 'bin\vendors' based application add the Git path to your 'deps' file.
-
-    [AzureDistributionBundle]
-    git=https://github.com/beberlei/AzureDistributionBundle.git
-    target=/bundles/WindowsAzure/DistributionBundle
-
-Then call "php bin\vendors install" or "php bin\vendors update" to install this package.Proceed with section "Autoloading"
-
-### Autoloading
-
-If you are not using Composer you have to manually register autoloading in 'app/autoload.php':
-
-    'WindowsAzure\\DistributionBundle' => __DIR__ . '/../vendor/bundles',
-
-Also you have to add the bundle in your kernel, see the next section on this.
-
-## Azure Kernel
-
-The Azure kernel can be used to set the temporary and cache directories to `sys_get_tempdir()` on production. These are the only writable directories for the webserver on Azure.
-
-    ```php
-    <?php
-
-    use Symfony\Component\HttpKernel\Kernel;
-    use Symfony\Component\Config\Loader\LoaderInterface;
-    use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel;
-
-    class AppKernel extends AzureKernel
-    {
-        $bundles = array(
-            // ...
-            new WindowsAzure\DistributionBundle\WindowsAzureDistributionBundle();
-            // ...
-        );
-
-        // keep the old code here.
-
-        return $bundles;
-    }
-    ```
 
 Using this kernel is totally optional. You can make the necessary modifications yourself to get the application running on Azure by pointing the log and cache directory to `sys_get_temp_dir()`.
 
-## Packaging
+# Packaging
 
 Before you start generating Azure packages you have to create the basic infrastructure. This bundle will create a folder `app/azure` with a bunch of configuration and resource files that are necessary for deployment. To initialize this infrastructure call:
 
@@ -117,7 +52,7 @@ Because compiling the roles file can take some time you can optimize this proces
 
 3. If the --dev-fabric flag isset after package generation the Azure dev-fabric will be started.
 
-### Optimizing Packaging
+## Optimizing Packaging
 
 Packaging always compiles a list of files to deploy before the actual packaging takes place and cspack.exe is called. This list of files includes the vendor directory by default. The vendor directory contains the largest amount of code in your application and takes longest to search through. However vendor code is rather static. The only time files are updated here is when you call:
 
@@ -128,44 +63,24 @@ You can hook in both vendor updating processes to directly generate a list of fi
 
 To get this working under Symfony 2.0.x put the following code into your 'bin/vendors' php script at the end:
 
-    ```php
-    <?php
-    //...
-    // Remove the cache
-    system(sprintf('%s %s cache:clear --no-warmup', $interpreter, escapeshellarg($rootDir.'/app/console')));
+```php
+<?php
+//...
+// Remove the cache
+system(sprintf('%s %s cache:clear --no-warmup', $interpreter, escapeshellarg($rootDir.'/app/console')));
 
-    // This line is new:
-    \WindowsAzure\DistributionBundle\Deployment\VendorRoleFilesListener::generateVendorRolesFile(__DIR__ . "/../vendor");
-    ```
+// This line is new:
+\WindowsAzure\DistributionBundle\Deployment\VendorRoleFilesListener::generateVendorRolesFile(__DIR__ . "/../vendor");
+```
 
 In Symfony 2.1 and higher put the following block into your applications composer.json:
 
-    ```javascript
-    "scripts": {
-        "post-update-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate",
-        "post-install-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate"
-    }
-    ```
-
-### Configure Packaging
-
-..
-
-## Troubleshooting
-
-1. Large cspkg files
-
-Currently the vendor directories are included in cspkg, which can lead to large files to be generated. This obviously causes network traffic and initial startup time overhead. The plan is to change this in the near future by using composer to fetch all the necessary dependencies on the web and worker roles during deployment.
-
-2. Path is too long during cspack.exe or csrun.exe
-
-Some Symfony2 bundles contain deep paths and hence your app does too. Windows filesystem functions have a limit of 248/260 chars for paths/files. This can lead to problem when packaging Azure applications, because the files are copied to a temporary directory inside the user directory during this operation. This bundle includes a detection for very long file names and throws an exception detailing the file paths that can cause problems.
-
-Another solution when this occurs during execution of "csrun.exe" is to set the environment variable `_CSRUN_STATE_DIRECTORY=c:\t` to a small directory, in this case `c:\t`.
-
-3. Access denied during cspack.exe
-
-You have to make sure that the specified output-path is writable and that the files/directories in there can be cleaned up during the package command.
+```javascript
+"scripts": {
+    "post-update-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate",
+    "post-install-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate"
+}
+```
 
 ## Azure Roles and Symfony applications
 
