@@ -1,5 +1,6 @@
 ---
 title: Table Service
+layout: default
 ---
 
 # Table Service

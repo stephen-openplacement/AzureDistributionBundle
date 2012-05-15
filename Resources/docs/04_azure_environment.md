@@ -1,4 +1,5 @@
 ---
+layout: default
 title: Azure Environment for Symfony
 ---
 
