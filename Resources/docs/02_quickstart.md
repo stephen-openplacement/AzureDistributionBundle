@@ -15,9 +15,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 3. Create a new subdirectory vendor\bundles\WindowsAzure\DistributionBundle
 
-4. Download the WindowsAzure Distribution Bundle (+dependencies) from https://github.com/beberlei/AzureDistributionBundle/downloads
-
-The file is called windows-azure-distribution-with-dependencies-v*.zip where the star can be replaced by some version. Pick the biggest version.
+4. Download the WindowsAzure Distribution Bundle (+dependencies) from https://github.com/beberlei/AzureDistributionBundle/downloads The file is called windows-azure-distribution-with-dependencies-v*.zip where the star can be replaced by some version. Pick the biggest version.
 
 5. Unzip the file and copy the contents into the vendor/azure folder
 
