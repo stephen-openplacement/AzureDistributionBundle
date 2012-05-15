@@ -1,3 +1,7 @@
+---
+title: Deploying assets on Azure
+---
+
 # Assets
 
 By default the packaging process is configured to serve assets (such as images,

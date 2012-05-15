@@ -1,3 +1,7 @@
+---
+title: Azure Sharding with Doctrine
+---
+
 # Sharding
 
 You can use SQL Azure Federations by enabling a shard manager for a Doctrine DBAL

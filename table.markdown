@@ -1,3 +1,7 @@
+---
+title: Table Service
+---
+
 # Table Service
 
 Note: Only works with Doctrine Common 2.2

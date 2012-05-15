@@ -1,3 +1,7 @@
+---
+title: Session Management
+---
+
 # Session
 
 Cloud providers require distributed storage mechanisms for the session. You can configure your Symfony application to run with SQL Azure (currently):

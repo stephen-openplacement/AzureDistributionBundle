@@ -1,3 +1,7 @@
+---
+title: Blob Storage
+---
+
 # Blob Storage
 
 The Windows Azure Distribution Bundle comes with support for accessing Windows Blob Storage.
