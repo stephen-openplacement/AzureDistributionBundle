@@ -63,24 +63,20 @@ You can hook in both vendor updating processes to directly generate a list of fi
 
 To get this working under Symfony 2.0.x put the following code into your 'bin/vendors' php script at the end:
 
-```php
-<?php
-//...
-// Remove the cache
-system(sprintf('%s %s cache:clear --no-warmup', $interpreter, escapeshellarg($rootDir.'/app/console')));
+    <?php
+    //...
+    // Remove the cache
+    system(sprintf('%s %s cache:clear --no-warmup', $interpreter, escapeshellarg($rootDir.'/app/console')));
 
-// This line is new:
-\WindowsAzure\DistributionBundle\Deployment\VendorRoleFilesListener::generateVendorRolesFile(__DIR__ . "/../vendor");
-```
+    // This line is new:
+    \WindowsAzure\DistributionBundle\Deployment\VendorRoleFilesListener::generateVendorRolesFile(__DIR__ . "/../vendor");
 
 In Symfony 2.1 and higher put the following block into your applications composer.json:
 
-```javascript
-"scripts": {
-    "post-update-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate",
-    "post-install-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate"
-}
-```
+    "scripts": {
+        "post-update-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate",
+        "post-install-cmd": "WindowsAzure\\DistributionBundle\\Deployment\\VendorRoleFilesListener::listenPostInstallUpdate"
+    }
 
 ## Azure Roles and Symfony applications
 

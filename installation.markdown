@@ -17,13 +17,11 @@ Grab the ZIP Download from Github https://github.com/beberlei/AzureDistributionB
 
 For [Composer](http://www.packagist.org)-based application, add this package to your composer.json:
 
-    ```javascript
     {
         "require": {
             "beberlei/azure-distribution-bundle": "*"
         }
     }
-    ```
 
 ## bin\vendors and deps
 
@@ -47,23 +45,21 @@ Also you have to add the bundle in your kernel, see the next section on this.
 
 The Azure kernel can be used to set the temporary and cache directories to `sys_get_tempdir()` on production. These are the only writable directories for the webserver on Azure.
 
-```php
-<?php
+    <?php
 
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel;
+    use Symfony\Component\HttpKernel\Kernel;
+    use Symfony\Component\Config\Loader\LoaderInterface;
+    use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel;
 
-class AppKernel extends AzureKernel
-{
-    $bundles = array(
-        // ...
-        new WindowsAzure\DistributionBundle\WindowsAzureDistributionBundle();
-        // ...
-    );
+    class AppKernel extends AzureKernel
+    {
+        $bundles = array(
+            // ...
+            new WindowsAzure\DistributionBundle\WindowsAzureDistributionBundle();
+            // ...
+        );
 
-    // keep the old code here.
+        // keep the old code here.
 
-    return $bundles;
-}
-```
+        return $bundles;
+    }
