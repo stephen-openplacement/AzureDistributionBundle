@@ -204,13 +204,12 @@ ul, ol, dl {
 }
 
 ul li {
-  /*list-style: inside;
-  padding-left: 20px;*/
+  list-style-type: circle;
+  margin-left: 20px;
 }
 
 ol li {
   list-style: decimal;
-  /*list-style: decimal inside;*/
   margin-left: 20px;
 }
 
