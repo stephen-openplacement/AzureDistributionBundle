@@ -1,5 +1,6 @@
 ---
 title: Azure Sharding with Doctrine
+layout: default
 ---
 
 # Sharding

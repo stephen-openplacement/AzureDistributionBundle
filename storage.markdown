@@ -1,5 +1,6 @@
 ---
 title: Blob Storage
+layout: default
 ---
 
 # Blob Storage
