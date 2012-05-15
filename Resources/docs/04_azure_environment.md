@@ -1,3 +1,7 @@
+---
+title: Azure Environment for Symfony
+---
+
 # Azure Environment
 
 The WindowsAzure DistributionBundle creates a new environment called 'azure' that inherits from 'prod'. This happens when you call `php app\console windowsazure:init`. The following files are responsible for this environment:
