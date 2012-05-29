@@ -24,6 +24,9 @@
         <download_github url="https://github.com/doctrine/shards/zipball/${shards_version}"
             target="doctrine-shards" />
 
+        <download_github url="https://github.com/beberlei/assert/zipball/master"
+            target="assert" />
+
         <download_github url="https://github.com/beberlei/AzureTaskDemoBundle/zipball/${taskdemo_version}"
             target="WindowsAzure/TaskDemoBundle" />
 
