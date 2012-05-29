@@ -8,7 +8,6 @@
     <property name="symfony_version" value="2.0.14" />
 
     <target name="build">
-
         <delete dir="build" />
         <mkdir dir="build" />
         <mkdir dir="build/azure-distribution-bundle" />

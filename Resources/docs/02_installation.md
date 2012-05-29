@@ -11,7 +11,7 @@ You can either install the SDK through [Web Platform Installer](http://azurephp.
 
 ## Composer
 
-For [Composer](http://www.packagist.org)-based application, add this package to your composer.json:
+The most simple way to use Azure Distribution Bundle is with [Composer](http://www.packagist.org)-based applications. Add this package to your composer.json and run `composer update`:
 
     {
         "require": {
@@ -25,19 +25,39 @@ For a 'bin\vendors' based application add the Git path to your 'deps' file.
 
     [AzureDistributionBundle]
     git=https://github.com/beberlei/AzureDistributionBundle.git
-    target=/bundles/WindowsAzure/DistributionBundle
+    target=/azure/WindowsAzure/DistributionBundle
 
-Then call "php bin\vendors install" or "php bin\vendors update" to install this package.Proceed with section "Autoloading"
+    [Assert]
+    git=https://github.com/beberlei/assert.git
+    target=/azure/assert
+
+    [AzureBlobStorage]
+    git=https://github.com/beberlei/azure-blob-storage.git
+    target=/azure/azure-blob-storage
+
+    [Shards]
+    git=https://github.com/doctrine/shards.git
+    target=/azure/doctrine-shards
+
+    [KeyValueStore]
+    git=https://github.com/doctrine/KeyValueStore.git
+    target=/azure/doctrine-keyvaluestore
+
+Then call "php bin\vendors install" or "php bin\vendors update" to install this package. Proceed with section "Autoloading"
 
 ## Download
 
-See the [quickstart](quickstart.html) for a way to download the whole code into your Symfony project.
+Go to https://github.com/beberlei/AzureDistributionBundle/downloads
 
 ## Autoloading
 
-If you are not using Composer you have to manually register autoloading in 'app/autoload.php':
+If you are using Download or Deps files you have to manually register autoloading in 'app/autoload.php':
 
-    'WindowsAzure\\DistributionBundle' => __DIR__ . '/../vendor/bundles',
+    'WindowsAzure\\DistributionBundle'  => __DIR__ . '/../vendor/azure/',
+    'WindowsAzure\\TaskDemoBundle'      => __DIR__ . '/../vendor/azure/',
+    'Beberlei\\AzureBlobStorage'        => __DIR__ . '/../vendor/azure/azure-blob-storage/lib/',
+    'Doctrine\\Shards'                  => __DIR__ . '/../vendor/azure/doctrine-shards/lib/',
+    'Doctrine\\KeyValueStore'           => __DIR__ . '/../vendor/azure/doctrine-keyvaluestore/lib/',
 
 Also you have to add the bundle in your kernel, see the next section on this.
 
