@@ -9,45 +9,16 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 ## Using a downloadable Symfony version
 
-1. Go to symfony.com/download and download the latest version with vendors. (Currently http://symfony.com/download?v=Symfony_Standard_Vendors_2.0.13.zip)
+1. Go to https://github.com/beberlei/AzureDistributionBundle/downloads. Download the latest "symfony-azure-distribution-v*.zip" file. This is a modified Symfony Standard Distribution including all necessary bundles and libraries for Windows Azure and  modified `app\autoload.php` and `app\AppKernel.php` files. Unzip this archive to a directory of your choice.
 
-2. Unzip the archive into a directory.
-
-3. Create a new subdirectory vendor\bundles\WindowsAzure\DistributionBundle
-
-4. Download the WindowsAzure Distribution Bundle (+dependencies) from https://github.com/beberlei/AzureDistributionBundle/downloads The file is called `windows-azure-distribution-with-dependencies-v*.zip` where the star can be replaced by some version. Pick the biggest version.
-
-5. Unzip the file and copy the contents into the vendor/azure folder
-
-6. Modify the app/autoload.php file to include the following lines in the array inside the `registerNamespaces()` method:
-
-        'WindowsAzure\\DistributionBundle'  => __DIR__ . '/../vendor/azure/',
-        'WindowsAzure\\TaskDemoBundle'      => __DIR__ . '/../vendor/azure/',
-        'Beberlei\\AzureBlobStorage'        => __DIR__ . '/../vendor/azure/azure-blob-storage/lib/',
-        'Doctrine\\Shards'                  => __DIR__ . '/../vendor/azure/doctrine-shards/lib/',
-        'Doctrine\\KeyValueStore'           => __DIR__ . '/../vendor/azure/doctrine-keyvaluestore/lib/',
-
-7. Modify the app/AppKernel.php to include `new WindowsAzure\DistributionBundle\WindowsAzureDistributionBundle()` in the $bundles array. Also replace the `extends Kernel` with `extends AzureKernel` and add a new import statement to the top of the file `use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel;`. Details of this step are described in the README.md of this project under the topic "Azure Kernel".
-
-8. Open up the terminal and go to the project root. Call "php app\console". You should see a list of commands, containing two of the windows azure commands at the bottom:
+2. Open up the terminal and go to the project root. Call "php app\console". You should see a list of commands, containing two of the windows azure commands at the bottom:
 
         windowsazure:init
         windowsazure:package
 
-9. Call `php app\console windowsazure:init`
+3. Call `php app\console windowsazure:init`. This creates a bunch of files in your project.
 
-10. Install the Azure TaskDemoBundle (optional) to see some of the features of Azure in a Demo application. See the section blow for a step by step introduction for this bundle.
-
-11. Call `php app\console windowsazure:package`
-
-12. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console
-
-13. Browse to http://appid.cloudapp.net/ - http://appid.cloudapp.net/hello/world or http://appid.cloudapp.net/tasks
-
-## Installing the Task Demo Bundle
-
-1. Add `new WindowsAzure\TaskDemoBundle\WindowsAzureTaskDemoBundle()` into the `$bundles` array in `app\AppKernel.php`
-2. Configure the database by modifying `app\config\azure_parameters.yml`.
+4. Configure the database by modifying `app\config\azure_parameters.yml`.
 
     An example of the parameters.yml looks like:
 
@@ -61,22 +32,42 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
             database_password: PWD
             database_name: DBNAME
 
-3. Configure Security
+5. Configure Security
 
     Open `app\config\security.yml` and exchange the line:
 
         - { resource: security.yml }
 
-    with the following line (careful with indention and make sure to use spaces, not tabs): 
+    with the following line (careful with indention and make sure to use spaces, not tabs):
 
         - { resource: ../../vendor/azure/WindowsAzure/TaskDemoBundle/Resources/config/security.yml }
 
-4. Register routes in app\config\routing.yml
+6. Register routes in app\config\routing.yml
 
         WindowsAzureTaskDemoBundle:
             resource: "@WindowsAzureTaskDemoBundle/Controller/"
             type:     annotation
             prefix:   /
 
+7. Configure Sharding options:
 
-5. Import the contents of the "schema.sql" from vendor\azure\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
+    windows_azure_distribution:
+        # append to existing config
+        federations:
+            default:
+                federationName: User_Federation
+                distributionKey: user_id
+                distributionType: guid
+
+
+8. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
+
+9. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console
+
+10. Import the contents of the "schema.sql" from vendor\azure\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
+
+11. Browse to http://appid.cloudapp.net/ - http://appid.cloudapp.net/hello/world or http://appid.cloudapp.net/tasks
+
+## Logging
+
+To get error logging working see the [Logging chapter](10_logging.md) of this documentation.
