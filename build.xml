@@ -49,6 +49,7 @@
     </target>
 
     <target name="build-docs">
+        <delete dir="build" />
         <exec executable="git"><arg value="checkout" /><arg value="gh-pages" /></exec>
 
         <exec output="overview.markdown" executable="git"><arg line="show master:Resources/docs/01_overview.md" /></exec>
