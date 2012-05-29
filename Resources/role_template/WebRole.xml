@@ -24,8 +24,7 @@
     <Imports>
         <!--
             Enable Diagnostics if you want to transfer log-files, performance counters and other
-            information to a storage account. See the 'windows_azure_distribution.diagnostics'
-            configuration in your Symfony configuration.
+            information to a storage account.
         -->
         <!--<Import moduleName="Diagnostics"/>-->
     </Imports>

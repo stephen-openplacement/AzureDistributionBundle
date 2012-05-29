@@ -3,13 +3,7 @@
     <Instances count="2" />
     <ConfigurationSettings>
         <!--
-             Configuration for Diagnostics Storage Account, keep empty to automatically
-             fill this from Symfony config.yml values in the key:
-
-                windows_azure_distribution
-                    diagnostics:
-                        accountName: xxx
-                        accountKey: yyy
+             Configuration for Diagnostics Storage Account.
 
              Delete this attribute if you don't want diagnostics for your role.
         -->

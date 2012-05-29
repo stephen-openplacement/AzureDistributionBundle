@@ -68,4 +68,6 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 11. Browse to http://appid.cloudapp.net/ - http://appid.cloudapp.net/hello/world or http://appid.cloudapp.net/tasks
 
+## Logging
 
+To get error logging working see the [Logging chapter](10_logging.md) of this documentation.
