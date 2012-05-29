@@ -9,7 +9,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 ## Using a downloadable Symfony version
 
-1. Go to https://github.com/beberlei/AzureDistributionBundle/downloads. Download the latest "symfony-azure-distribution-v*.zip" file. This is a modified Symfony Standard Distribution including all necessary bundles and libraries for Windows Azure and  modified `app\autoload.php` and `app\AppKernel.php` files. Unzip this archive to a directory of your choice.
+1. Go to `https://github.com/beberlei/AzureDistributionBundle/downloads`. Download the latest `symfony-azure-distribution-v*.zip` file. This is a modified Symfony Standard Distribution including all necessary bundles and libraries for Windows Azure and  modified `app\autoload.php` and `app\AppKernel.php` files. Unzip this archive to a directory of your choice.
 
 2. Open up the terminal and go to the project root. Call "php app\console". You should see a list of commands, containing two of the windows azure commands at the bottom:
 
