@@ -5,6 +5,7 @@
     <property name="kvs_version" value="v0.1" />
     <property name="shards_version" value="v1.0" />
     <property name="taskdemo_version" value="v1.1" />
+    <property name="symfony_version" value="2.0.14" />
 
     <target name="build">
 
@@ -32,6 +33,20 @@
 
         <copy file="build/azure-distribution-bundle/WindowsAzure/DistributionBundle/README.md" todir="build/azure-distribution-bundle" />
         <zip basedir="build/azure-distribution-bundle/" destfile="build/azure-distribution-bundle-${azure_distribution_bundle_version}.zip" />
+
+        <get src="http://symfony.com/download?v=Symfony_Standard_Vendors_${symfony_version}.zip" dest="build/symfony.zip" />
+        <unzip src="build/symfony.zip" dest="build/symfony-azure-dist" />
+        <unzip src="build/azure-distribution-bundle-${azure_distribution_bundle_version}.zip" dest="build/symfony-azure-dist/Symfony/vendor/azure" />
+        <exec executable="php">
+            <arg value="Resources/bin/patch_kernel.php" />
+            <arg value="build/symfony-azure-dist/Symfony/app/AppKernel.php" />
+        </exec>
+        <exec executable="php">
+            <arg value="Resources/bin/patch_autoload.php" />
+            <arg value="build/symfony-azure-dist/Symfony/app/autoload.php" />
+        </exec>
+
+        <zip basedir="build/symfony-azure-dist" destfile="build/symfony-azure-distribution-${azure_distribution_bundle_version}.zip" />
     </target>
 
     <target name="build-docs">
