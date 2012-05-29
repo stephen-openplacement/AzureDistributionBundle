@@ -4,7 +4,7 @@
     <property name="azure_blob_version" value="v1.0" />
     <property name="kvs_version" value="v0.1" />
     <property name="shards_version" value="v1.0" />
-    <property name="taskdemo_version" value="v1.1" />
+    <property name="taskdemo_version" value="v1.2" />
     <property name="symfony_version" value="2.0.14" />
 
     <target name="build">
