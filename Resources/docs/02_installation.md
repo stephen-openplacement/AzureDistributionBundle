@@ -47,7 +47,8 @@ Then call "php bin\vendors install" or "php bin\vendors update" to install this 
 
 ## Download
 
-Go to https://github.com/beberlei/AzureDistributionBundle/downloads
+Go to https://github.com/beberlei/AzureDistributionBundle/downloads. Download
+the `azure-distribution-bundle-v*.zip` file into the `vendor/azure` directory.
 
 ## Autoloading
 
