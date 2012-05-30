@@ -20,7 +20,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 4. Configure the database by modifying `app\config\parameters_azure.yml`.
 
-    An example of the parameters.yml looks like:
+    An example of the parameters_azure.yml looks like:
 
         # Put Azure Specific configuration parameters into
         # this file. These will overwrite parameters from parameters.yml
@@ -49,6 +49,8 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
             type:     annotation
             prefix:   /
 
+    Note: Beware, Yaml only allows spaces no tabs and the correct indention is important.
+
 7. Configure Federation in `app\config\config_azure.yml` after the session configuration:
 
         windows_azure_distribution:
@@ -65,6 +67,8 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
               federationName: User_Federation
               distributionKey: user_id
               distributionType: guid
+
+    Note: Beware, Yaml only allows spaces no tabs and the correct indention is important.
 
 8. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
 
