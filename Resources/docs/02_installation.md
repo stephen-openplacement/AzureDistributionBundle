@@ -57,6 +57,7 @@ If you are using Download or Deps files you have to manually register autoloadin
     'WindowsAzure\\DistributionBundle'  => __DIR__ . '/../vendor/azure/',
     'WindowsAzure\\TaskDemoBundle'      => __DIR__ . '/../vendor/azure/',
     'Beberlei\\AzureBlobStorage'        => __DIR__ . '/../vendor/azure/azure-blob-storage/lib/',
+    'Assert\\'                          => __DIR__ . '/../vendor/azure/assert/lib/',
     'Doctrine\\Shards'                  => __DIR__ . '/../vendor/azure/doctrine-shards/lib/',
     'Doctrine\\KeyValueStore'           => __DIR__ . '/../vendor/azure/doctrine-keyvaluestore/lib/',
 
