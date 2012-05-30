@@ -49,10 +49,17 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
             type:     annotation
             prefix:   /
 
-7. Configure Sharding options:
+7. Configure Federation in `app\config\config_azure.yml` after the session configuration:
 
         windows_azure_distribution:
-          # append to existing config
+          session:
+            type: %session_type%
+            database:
+              host: %database_host%
+              username: %database_user%
+              password: %database_password%
+              database: %database_name%
+          # NEW: append to existing config, align with session key
           federations:
             default:
               federationName: User_Federation
@@ -70,3 +77,4 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 ## Logging
 
 To get error logging working see the [Logging chapter](10_logging.md) of this documentation.
+
