@@ -9,7 +9,7 @@ In Windows Azure Logging is handled by the so-called diagnostics module.
 It allows you to synchronize log files from the server to a blob storage account
 in configurable time-intervals.
 
-To enable logging open up your `app/config/ServiceDefinition.csdef` file and
+To enable logging open up your `app\azure\ServiceDefinition.csdef` file and
 uncomment the following line:
 
     <!--<Import moduleName="Diagnostics"/>-->
