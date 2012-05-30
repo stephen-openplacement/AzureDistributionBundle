@@ -24,5 +24,14 @@ You can create a Storage account from the Windows Azure Control Panel. Just ente
 
 The diagnostics are configured in `app\azure\Sf2.Web\diagnostics.wadcfg`. By default the log files are synchronized to the storage every 10 minutes. You can download the files from there to debug your application.
 
+    <DiagnosticMonitorConfiguration xmlns="http://schemas.microsoft.com/ServiceHosting/2010/10/DiagnosticsConfiguration" configurationChangePollInterval="PT10M" overallQuotaInMB="4096">
+        <Directories bufferQuotaInMB="0" scheduledTransferPeriod="PT10M">
+            <DirectoryConfiguration container="wad-symfony" directoryQuotaInMB="128">
+                <LocalResource name="SymfonyLogFiles" relativePath="logs" />
+            </DirectoryConfiguration>
+        </Directories>
+    </DiagnosticMonitorConfiguration>
+
+
 Make sure to keep an eye on the size of those files and the synchronization interval, as the synchronization to the storage account can cost you money.
 
