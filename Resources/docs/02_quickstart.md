@@ -51,14 +51,13 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 7. Configure Sharding options:
 
-    windows_azure_distribution:
-        # append to existing config
-        federations:
+        windows_azure_distribution:
+          # append to existing config
+          federations:
             default:
-                federationName: User_Federation
-                distributionKey: user_id
-                distributionType: guid
-
+              federationName: User_Federation
+              distributionKey: user_id
+              distributionType: guid
 
 8. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
 
