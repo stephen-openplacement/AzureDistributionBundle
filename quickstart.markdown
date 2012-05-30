@@ -70,13 +70,23 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
     Note: Beware, Yaml only allows spaces no tabs and the correct indention is important.
 
-8. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
+8. For the Azure Table features, add the following to your `app\config\config_azure.yml`:
 
-9. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console
+        windows_azure_distribution:
+            # previous 'session' and 'federations' config here.
+            table:
+                account: "accountName"
+                key: "accountKey"
+                    
+    Note: Beware, Yaml only allows spaces no tabs and the correct indention is important.
 
-10. Import the contents of the "schema.sql" from vendor\azure\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
+9. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
 
-11. Browse to http://appid.cloudapp.net/ - http://appid.cloudapp.net/hello/world or http://appid.cloudapp.net/tasks
+10. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console
+
+11. Import the contents of the "schema.sql" from vendor\azure\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
+
+12. Browse to http://appid.cloudapp.net/ - http://appid.cloudapp.net/hello/world or http://appid.cloudapp.net/tasks
 
 ## Logging
 
