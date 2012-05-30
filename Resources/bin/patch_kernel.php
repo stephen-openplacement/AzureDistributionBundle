@@ -15,7 +15,10 @@ $kernelContents = file_get_contents($kernelFile);
 $kernelContents = str_replace('use Symfony\Component\HttpKernel\Kernel;', 'use WindowsAzure\DistributionBundle\HttpKernel\AzureKernel;', $kernelContents);
 $kernelContents = str_replace('extends Kernel', 'extends AzureKernel', $kernelContents);
 
-$addBundles = array('WindowsAzure\DistributionBundle\WindowsAzureDistributionBundle');
+$addBundles = array(
+    'WindowsAzure\DistributionBundle\WindowsAzureDistributionBundle',
+    'WindowsAzure\TaskDemoBundle\WindowsAzureTaskDemoBundle',
+);
 
 $lines = explode("\n", $kernelContents);
 $newLines = array();

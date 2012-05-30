@@ -62,6 +62,7 @@
         <exec output="table.markdown" executable="git"><arg line="show master:Resources/docs/05_table.md" /></exec>
         <exec output="sharding.markdown" executable="git"><arg line="show master:Resources/docs/06_sharding.md" /></exec>
         <exec output="assets.markdown" executable="git"><arg line="show master:Resources/docs/07_assets.md" /></exec>
+        <exec output="logging.markdown" executable="git"><arg line="show master:Resources/docs/09_logging.md" /></exec>
         <exec output="troubleshooting.markdown" executable="git"><arg line="show master:Resources/docs/08_troubleshooting.md" /></exec>
 
         <exec executable="jekyll"><arg value="--pygments" /></exec>
