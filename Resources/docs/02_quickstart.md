@@ -18,7 +18,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 3. Call `php app\console windowsazure:init`. This creates a bunch of files in your project.
 
-4. Configure the database by modifying `app\config\azure_parameters.yml`.
+4. Configure the database by modifying `app\config\parameters_azure.yml`.
 
     An example of the parameters.yml looks like:
 
@@ -42,7 +42,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
         - { resource: ../../vendor/azure/WindowsAzure/TaskDemoBundle/Resources/config/security.yml }
 
-6. Register routes in app\config\routing.yml
+6. Register routes in `app\config\routing.yml`:
 
         WindowsAzureTaskDemoBundle:
             resource: "@WindowsAzureTaskDemoBundle/Controller/"
