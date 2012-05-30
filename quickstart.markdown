@@ -18,9 +18,9 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 3. Call `php app\console windowsazure:init`. This creates a bunch of files in your project.
 
-4. Configure the database by modifying `app\config\azure_parameters.yml`.
+4. Configure the database by modifying `app\config\parameters_azure.yml`.
 
-    An example of the parameters.yml looks like:
+    An example of the parameters_azure.yml looks like:
 
         # Put Azure Specific configuration parameters into
         # this file. These will overwrite parameters from parameters.yml
@@ -42,23 +42,33 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
         - { resource: ../../vendor/azure/WindowsAzure/TaskDemoBundle/Resources/config/security.yml }
 
-6. Register routes in app\config\routing.yml
+6. Register routes in `app\config\routing.yml`:
 
         WindowsAzureTaskDemoBundle:
             resource: "@WindowsAzureTaskDemoBundle/Controller/"
             type:     annotation
             prefix:   /
 
-7. Configure Sharding options:
+    Note: Beware, Yaml only allows spaces no tabs and the correct indention is important.
 
-    windows_azure_distribution:
-        # append to existing config
-        federations:
+7. Configure Federation in `app\config\config_azure.yml` after the session configuration:
+
+        windows_azure_distribution:
+          session:
+            type: %session_type%
+            database:
+              host: %database_host%
+              username: %database_user%
+              password: %database_password%
+              database: %database_name%
+          # NEW: append to existing config, align with session key
+          federations:
             default:
-                federationName: User_Federation
-                distributionKey: user_id
-                distributionType: guid
+              federationName: User_Federation
+              distributionKey: user_id
+              distributionType: guid
 
+    Note: Beware, Yaml only allows spaces no tabs and the correct indention is important.
 
 8. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
 
@@ -71,3 +81,4 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 ## Logging
 
 To get error logging working see the [Logging chapter](10_logging.md) of this documentation.
+
