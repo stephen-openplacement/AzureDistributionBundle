@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <project name="Windows Azure DistributionBundle" default="build" basedir=".">
-    <property name="azure_distribution_bundle_version" value="v1.0.3" />
+    <property name="azure_distribution_bundle_version" value="v1.0.4" />
     <property name="azure_blob_version" value="v1.0" />
     <property name="kvs_version" value="v0.1" />
     <property name="shards_version" value="v1.0" />
     <property name="taskdemo_version" value="v1.2" />
-    <property name="symfony_version" value="2.0.14" />
+    <property name="symfony_version" value="2.0.15" />
 
     <target name="build">
         <delete dir="build" />
