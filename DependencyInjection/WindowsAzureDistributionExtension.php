@@ -63,10 +63,6 @@ class WindowsAzureDistributionExtension extends Extension
             return;
         }
 
-        if ( ! class_exists('Doctrine\KeyValueStore\EntityManager')) {
-            return;
-        }
-
         $driver = new Definition('Doctrine\KeyValueStore\Mapping\AnnotationDriver');
         $driver->addArgument(new Reference('annotation_reader'));
         $container->setDefinition('windows_azure_distribution.table.driver', $driver);
@@ -124,11 +120,6 @@ class WindowsAzureDistributionExtension extends Extension
     protected function loadStorages($config, $container)
     {
         if ( ! isset($config['blob_storage'])) {
-            return;
-        }
-
-        if ( ! class_exists('Beberlei\AzureBlobStorage\StorageRegistry')) {
-            $container->removeDefinition('windows_azure_distribution.storage_registry');
             return;
         }
 
