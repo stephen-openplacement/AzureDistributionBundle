@@ -85,11 +85,16 @@ class WindowsAzureDistributionExtension extends Extension
         ));
         $container->setDefinition('windows_azure_distribution.table.storage', $storage);
 
+        $configDef = new Definition('Doctrine\KeyValueStore\Configuration');
+        $configDef->addMethodCall('setMetadataCache', array(new Reference('windows_azure_distribution.table.cache')));
+        $configDef->addMethodCall('setMappingDriverImpl', array(new Reference('windows_azure_distribution.table.driver')));
+
+        $container->setDefinition('windows_azure_distribution.table.config', $configDef);
+
         $em = new Definition('Doctrine\KeyValueStore\EntityManager');
         $em->setArguments(array(
             new Reference('windows_azure_distribution.table.storage'),
-            new Reference('windows_azure_distribution.table.cache'),
-            new Reference('windows_azure_distribution.table.driver'),
+            new Reference('windows_azure_distribution.table.config'),
         ));
 
         $container->setDefinition('windows_azure_distribution.table.manager', $em);
