@@ -90,7 +90,6 @@ class ServiceConfiguration
         if ($this->dom->save($this->serviceConfigurationFile) === false) {
             throw new \RuntimeException(sprintf("Could not write ServiceConfiguration to '%s'",
                         $this->serviceConfigurationFile));
-            $this->dom->load($this->serviceConfigurationFile);
         }
     }
 
