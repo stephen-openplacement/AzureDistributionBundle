@@ -214,6 +214,8 @@ EXC
         $certificateNode->setAttribute('thumbprintAlgorithm', 'sha1');
 
         $certificatesNode->appendChild($certificateNode);
+
+        $this->save();
     }
 
     public function getXml()
