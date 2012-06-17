@@ -7,6 +7,13 @@ title: Quickstart
 
 This quickstart will guide you through the steps to deploy a clean Symfony2 application on Windows Azure. This will contain the AcmeDemoBundle that has a very simple hello world page.
 
+Prerequisites:
+
+* Windows Machine or VM
+* Windows Azure SDK (Not the PHP one)
+* Azure (Test-)Account with SQL Server Database + Storage Account
+* PHP with [OpenSSL](http://php.net/manual/en/openssl.installation.php) configured to generate keys
+
 ## Using a downloadable Symfony version
 
 1. Go to `https://github.com/beberlei/AzureDistributionBundle/downloads`. Download the latest `symfony-azure-distribution-v*.zip` file. This is a modified Symfony Standard Distribution including all necessary bundles and libraries for Windows Azure and  modified `app\autoload.php` and `app\AppKernel.php` files. Unzip this archive to a directory of your choice.
@@ -16,7 +23,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
         windowsazure:init
         windowsazure:package
 
-3. Call `php app\console windowsazure:init`. This creates a bunch of files in your project.
+3. Call `php app\console windowsazure:init`. The result should show that a Webrole was generated and display two passwords for the Remote Desktoping feature. Note down both passwords, you need them during deployment. If an error occurs during the key generation, take a look at the [OpenSSL](http://php.net/manual/en/openssl.installation.php) Installation notes and setup an `openssl.cnf`.
 
 4. Configure the database by modifying `app\config\parameters_azure.yml`.
 
@@ -82,7 +89,7 @@ This quickstart will guide you through the steps to deploy a clean Symfony2 appl
 
 9. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
 
-10. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console
+10. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console. If the Remote Desktop keys were generated successfully, add the certifcate file from `app\azure\Sf2.Web.pfx`.
 
 11. Import the contents of the "schema.sql" from vendor\azure\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
 
