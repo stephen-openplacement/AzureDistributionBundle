@@ -113,6 +113,7 @@ class AzureDeployment
         );
         $serviceConfiguration->setConfigurationSetting($roleName, 'Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration', $expirationDate->format('c'));
         $serviceConfiguration->setConfigurationSetting($roleName, 'Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled', 'true');
+        $serviceConfiguration->addCertificate($certificate);
     }
 
     /**

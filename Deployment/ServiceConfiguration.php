@@ -150,7 +150,6 @@ EXC
         $xpath = new \DOMXpath($this->dom);
         $xpath->registerNamespace('sc', $namespaceUri);
 
-        // Why is Setting not in sc:?
         $xpathExpression = '//sc:Role[@name="' . $roleName . '"]//sc:ConfigurationSettings//sc:Setting[@name="' . $name . '"]';
         $settingList     = $xpath->evaluate($xpathExpression);
 
@@ -173,6 +172,48 @@ EXC
         $settingNode->setAttribute('value', $value);
 
         $this->save();
+    }
+
+    /**
+     * Add Certificate to the Role
+     *
+     * @param string $roleName
+     * @param RemoteDesktopCertificate $certificate
+     */
+    public function addCertificate($roleName, RemoteDesktopCertificate $certificate)
+    {
+        $namespaceUri = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
+        $xpath = new \DOMXpath($this->dom);
+        $xpath->registerNamespace('sc', $namespaceUri);
+
+        $xpathExpression = '//sc:Role[@name="' . $roleName . '"]//sc:Certificates';
+        $certificateList = $xpath->evaluate($xpathExpression);
+
+        if ($certificateList->length == 1) {
+            $certificatesNode = $certificateList->item(0);
+
+            foreach ($certificatesNode->childNodes as $certificateNode) {
+                $certificatesNode->removeElement($certificateNode);
+            }
+        } else {
+            $certificatesNode = $this->dom->createElementNS($namespaceUri, 'Certificates');
+
+            $roleNodeList = $xpath->evaluate('//sc:Role[@name="' . $roleName . '"]');
+
+            if ($roleNodeList->length == 0) {
+                throw new \RuntimeException("No Role found with name '" . $roleName . "'.");
+            }
+
+            $roleNode = $roleNodeList->item(0);
+            $roleNode->appendChild($certificatesNode);
+        }
+
+        $certificateNode = $this->dom->createElementNS($namespaceUri, 'Certificate');
+        $certificateNode->setAttribute('name', 'Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption');
+        $certificateNode->setAttribute('thumbprint', $certificate->getThumbprint());
+        $certificateNode->setAttribute('thumbprintAlgorithm', 'sha1');
+
+        $certificatesNode->appendChild($certificateNode);
     }
 
     public function getXml()

@@ -2,6 +2,7 @@
 namespace WindowsAzure\DistributionBundle\Tests\Deployment;
 
 use WindowsAzure\DistributionBundle\Deployment\ServiceConfiguration;
+use WindowsAzure\DistributionBundle\Deployment\RemoteDesktopCertificate;
 
 class ServiceConfigurationTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +30,15 @@ class ServiceConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotContains('<Setting name="Key" value="value"/>', $sc->getXml());
         $this->assertContains('<Setting name="Key" value="value2"/>', $sc->getXml());
+    }
+
+    public function testAddCertificate()
+    {
+        $sc = $this->createServiceConfiguration();
+        $certificate = RemoteDesktopCertificate::generate();
+        $sc->addCertificate('Sf2.Web', $certificate);
+
+        $this->assertContains('<Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption"', $sc->getXml());
     }
 }
 
