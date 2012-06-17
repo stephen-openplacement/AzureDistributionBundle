@@ -52,6 +52,7 @@ class InitCommand extends ContainerAwareCommand
         $output->writeln(sprintf('<info>Created basic Azure structure and one WebRole "%s"</info>', $roleName));
 
         if (extension_loaded('openssl')) {
+            $length          = 8;
             $keyPassword     = base64_encode(openssl_random_pseudo_bytes(8, $strong));
             $keyPassword     = substr($keyPassword, 0, $length);
             $desktopPassword = base64_encode(openssl_random_pseudo_bytes(8, $strong));

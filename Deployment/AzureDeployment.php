@@ -14,6 +14,7 @@
 namespace WindowsAzure\DistributionBundle\Deployment;
 
 use Symfony\Component\Filesystem\Filesystem;
+use DateTime;
 
 /**
  * Access to details of the azure deployment of this project.
@@ -103,14 +104,15 @@ class AzureDeployment
         $expirationDate = new DateTime("+365 day");
 
         $serviceConfiguration = $this->getServiceConfiguration();
-        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled', 'true');
-        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername', get_current_user());
+        $serviceConfiguration->setConfigurationSetting($roleName, 'Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled', 'true');
+        $serviceConfiguration->setConfigurationSetting($roleName, 'Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername', get_current_user());
         $serviceConfiguration->setConfigurationSetting(
+            $roleName,
             'Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword',
             $certificate->encryptAccountPassword($x509File, $desktopPassword)
         );
-        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration', $expirationDate->format('c'));
-        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled', 'true');
+        $serviceConfiguration->setConfigurationSetting($roleName, 'Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration', $expirationDate->format('c'));
+        $serviceConfiguration->setConfigurationSetting($roleName, 'Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled', 'true');
     }
 
     /**
