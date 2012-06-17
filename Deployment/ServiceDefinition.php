@@ -143,10 +143,26 @@ class ServiceDefinition
         $webRoleNode = $this->dom->importNode($webRoleNode, true);
         $this->dom->documentElement->appendChild($webRoleNode);
 
+        $this->save();
+    }
+
+    private function save()
+    {
         if ($this->dom->save($this->serviceDefinitionFile) === false) {
             throw new \RuntimeException(sprintf("Could not write ServiceDefinition to '%s'",
                 $this->serviceDefinitionFile));
         }
+    }
+
+    public function addImport($moduleName)
+    {
+        $importNode = $this->dom->createElement('Import');
+        $importNode->setAttribute('moduleName', $moduleName);
+
+        $imports = $this->dom->getElementsByTagName('Imports')->item(0);
+        $imports->appendChild($importNode);
+
+        $this->save();
     }
 
     private function getValues($tagName, $attributeName)

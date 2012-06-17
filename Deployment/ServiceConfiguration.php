@@ -71,6 +71,11 @@ class ServiceConfiguration
         $roleNode = $this->dom->importNode($roleNode, true);
         $this->dom->documentElement->appendChild($roleNode);
 
+        $this->save();
+    }
+
+    private function save()
+    {
         if ($this->dom->save($this->serviceConfigurationFile) === false) {
             throw new \RuntimeException(sprintf("Could not write ServiceConfiguration to '%s'",
                         $this->serviceConfigurationFile));
@@ -120,6 +125,40 @@ EXC
         }
 
         $dom->save($targetPath . '/ServiceConfiguration.cscfg');
+    }
+
+    /**
+     * Add a configuration setting to the ServiceConfiguration.cscfg
+     *
+     * @param string $name
+     * @param string $value
+     */
+    public function setConfigurationSetting($roleName, $name, $value)
+    {
+        $xpath = new \DOMXpath($this->dom);
+        $xpath->registerNamespace('sc', $this->dom->lookupNamespaceUri($this->dom->namespaceURI));
+
+        $settingList = $xpath->evaluate('//sc:Role[@name="' . $roleName . '"]/sc:ConfigurationSettings/sc:Setting[@name="' . $name . '"]');
+
+        if ($settingList->length == 1) {
+            $settingNode = $settingList->item(0);
+        } else {
+            $settingNode = $this->dom->createElement('Setting');
+            $settingNode->setAttribute('name', $name);
+
+            $configSettingList = $xpath->evaluate('//sc:Role[@name="' . $roleName . '"]/sc:ConfigurationSettings');
+
+            if ($configSettingList->length == 0) {
+                throw new \RuntimeException("Cannot find <ConfigurationSettings /> in Role '" . $roleName . "'.");
+            }
+
+            $configSettings = $configSettingsList->item(0);
+            $configSettings->appendChild($settingNode);
+        }
+
+        $settingNode->setAttribute('value', $value);
+
+        $this->save();
     }
 }
 

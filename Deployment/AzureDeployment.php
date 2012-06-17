@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class AzureDeployment
 {
-    const ROLE_WEB = 'WebRole';
+    const ROLE_WEB    = 'WebRole';
     const ROLE_WORKER = 'WorkerRole';
 
     /**
@@ -89,6 +89,28 @@ class AzureDeployment
             $filesystem->mkdir($this->binDir, 0777);
         }
         $filesystem->mirror(__DIR__ . '/../Resources/role_template/bin', $this->binDir, null, array('copy_on_windows' => true));
+    }
+
+    public function generateRemoteDesktopKey($roleName, $desktopPassword, $keyPassword, $overwrite = false)
+    {
+        $certificate = RemoteDesktopCertificate::generate();
+        $x509File    = $certificate->export($this->configDir, $roleName, $keyPassword, $overwrite);
+
+        $serviceDefinition = $this->getServiceDefinition();
+        $serviceDefinition->addImport("RemoteAccess");
+        $serviceDefinition->addImport("RemoteForwarder");
+
+        $expirationDate = new DateTime("+365 day");
+
+        $serviceConfiguration = $this->getServiceConfiguration();
+        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled', 'true');
+        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername', get_current_user());
+        $serviceConfiguration->setConfigurationSetting(
+            'Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword',
+            $certificate->encryptAccountPassword($x509File, $desktopPassword)
+        );
+        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration', $expirationDate->format('c'));
+        $serviceConfiguration->setConfigurationSetting('Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled', 'true');
     }
 
     /**
