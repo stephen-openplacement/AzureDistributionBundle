@@ -51,6 +51,7 @@ class ServiceConfiguration
         $this->serviceConfigurationFile = $serviceConfigurationFile;
         $this->storage                  = $storage;
         $this->dom                      = new \DOMDocument('1.0', 'UTF-8');
+        $this->dom->formatOutput        = true;
         $this->dom->load($this->serviceConfigurationFile);
     }
 
@@ -59,16 +60,26 @@ class ServiceConfiguration
         return $this->serviceConfigurationFile;
     }
 
+    /**
+     * Add a role to service configuration
+     *
+     * @param string $name
+     */
     public function addRole($name)
     {
-        $role = new \DOMDocument('1.0', 'UTF-8');
-        $role->load(__DIR__ . '/../Resources/role_template/RoleConfig.xml');
+        $namespaceUri = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
 
-        $roles = $role->getElementsByTagName('Role');
-        $roleNode = $roles->item(0);
+        $roleNode = $this->dom->createElementNS($namespaceUri, 'Role');
         $roleNode->setAttribute('name', $name);
 
-        $roleNode = $this->dom->importNode($roleNode, true);
+        $instancesNode = $this->dom->createElementNS($namespaceUri, 'Instances');
+        $instancesNode->setAttribute('count', '2');
+
+        $configurationSettings = $this->dom->createElementNS($namespaceUri, 'ConfigurationSettings');
+
+        $roleNode->appendChild($instancesNode);
+        $roleNode->appendChild($configurationSettings);
+
         $this->dom->documentElement->appendChild($roleNode);
 
         $this->save();
