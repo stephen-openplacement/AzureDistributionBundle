@@ -141,13 +141,13 @@ EXC
         $xpath->registerNamespace('sc', $namespaceUri);
 
         // Why is Setting not in sc:?
-        $xpathExpression = '//sc:Role[@name="' . $roleName . '"]//sc:ConfigurationSettings//Setting[@name="' . $name . '"]';
+        $xpathExpression = '//sc:Role[@name="' . $roleName . '"]//sc:ConfigurationSettings//sc:Setting[@name="' . $name . '"]';
         $settingList     = $xpath->evaluate($xpathExpression);
 
         if ($settingList->length == 1) {
             $settingNode = $settingList->item(0);
         } else {
-            $settingNode = $this->dom->createElement('Setting');
+            $settingNode = $this->dom->createElementNS($namespaceUri, 'Setting');
             $settingNode->setAttribute('name', $name);
 
             $configSettingList = $xpath->evaluate('//sc:Role[@name="' . $roleName . '"]/sc:ConfigurationSettings');
