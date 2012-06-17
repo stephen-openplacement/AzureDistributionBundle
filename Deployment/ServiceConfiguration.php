@@ -49,9 +49,9 @@ class ServiceConfiguration
         }
 
         $this->serviceConfigurationFile = $serviceConfigurationFile;
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+        $this->storage                  = $storage;
+        $this->dom                      = new \DOMDocument('1.0', 'UTF-8');
         $this->dom->load($this->serviceConfigurationFile);
-        $this->storage = $storage;
     }
 
     public function getPath()
@@ -79,6 +79,7 @@ class ServiceConfiguration
         if ($this->dom->save($this->serviceConfigurationFile) === false) {
             throw new \RuntimeException(sprintf("Could not write ServiceConfiguration to '%s'",
                         $this->serviceConfigurationFile));
+            $this->dom->load($this->serviceConfigurationFile);
         }
     }
 
@@ -135,10 +136,13 @@ EXC
      */
     public function setConfigurationSetting($roleName, $name, $value)
     {
+        $namespaceUri = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
         $xpath = new \DOMXpath($this->dom);
-        $xpath->registerNamespace('sc', $this->dom->lookupNamespaceUri($this->dom->namespaceURI));
+        $xpath->registerNamespace('sc', $namespaceUri);
 
-        $settingList = $xpath->evaluate('//sc:Role[@name="' . $roleName . '"]/sc:ConfigurationSettings/sc:Setting[@name="' . $name . '"]');
+        // Why is Setting not in sc:?
+        $xpathExpression = '//sc:Role[@name="' . $roleName . '"]//sc:ConfigurationSettings//Setting[@name="' . $name . '"]';
+        $settingList     = $xpath->evaluate($xpathExpression);
 
         if ($settingList->length == 1) {
             $settingNode = $settingList->item(0);
@@ -152,13 +156,18 @@ EXC
                 throw new \RuntimeException("Cannot find <ConfigurationSettings /> in Role '" . $roleName . "'.");
             }
 
-            $configSettings = $configSettingsList->item(0);
+            $configSettings = $configSettingList->item(0);
             $configSettings->appendChild($settingNode);
         }
 
         $settingNode->setAttribute('value', $value);
 
         $this->save();
+    }
+
+    public function getXml()
+    {
+        return $this->dom->saveXml();
     }
 }
 
