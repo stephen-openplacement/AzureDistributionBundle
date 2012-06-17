@@ -44,12 +44,13 @@ class RemoteDesktopCertificate
         }
 
         // Generate a new private (and public) key pair
-        $privkey = openssl_pkey_new();
+        $config = array('config' => __DIR__ . '/../Resources/config/openssl.cnf');
+        $privkey = openssl_pkey_new($config);
 
         // Generate a certificate signing request
         $dn     = array("commonName" => "AzureDistributionBundle for Symfony Tools");
-        $csr    = openssl_csr_new($dn, $privkey);
-        $sscert = openssl_csr_sign($csr, null, $privkey, 365);
+        $csr    = openssl_csr_new($dn, $privkey, $config);
+        $sscert = openssl_csr_sign($csr, null, $privkey, 365, $config);
 
         return new self($privkey, $sscert);
     }
