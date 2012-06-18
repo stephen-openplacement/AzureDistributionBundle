@@ -49,9 +49,10 @@ class ServiceConfiguration
         }
 
         $this->serviceConfigurationFile = $serviceConfigurationFile;
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+        $this->storage                  = $storage;
+        $this->dom                      = new \DOMDocument('1.0', 'UTF-8');
+        $this->dom->formatOutput        = true;
         $this->dom->load($this->serviceConfigurationFile);
-        $this->storage = $storage;
     }
 
     public function getPath()
@@ -59,18 +60,33 @@ class ServiceConfiguration
         return $this->serviceConfigurationFile;
     }
 
+    /**
+     * Add a role to service configuration
+     *
+     * @param string $name
+     */
     public function addRole($name)
     {
-        $role = new \DOMDocument('1.0', 'UTF-8');
-        $role->load(__DIR__ . '/../Resources/role_template/RoleConfig.xml');
+        $namespaceUri = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
 
-        $roles = $role->getElementsByTagName('Role');
-        $roleNode = $roles->item(0);
+        $roleNode = $this->dom->createElementNS($namespaceUri, 'Role');
         $roleNode->setAttribute('name', $name);
 
-        $roleNode = $this->dom->importNode($roleNode, true);
+        $instancesNode = $this->dom->createElementNS($namespaceUri, 'Instances');
+        $instancesNode->setAttribute('count', '2');
+
+        $configurationSettings = $this->dom->createElementNS($namespaceUri, 'ConfigurationSettings');
+
+        $roleNode->appendChild($instancesNode);
+        $roleNode->appendChild($configurationSettings);
+
         $this->dom->documentElement->appendChild($roleNode);
 
+        $this->save();
+    }
+
+    private function save()
+    {
         if ($this->dom->save($this->serviceConfigurationFile) === false) {
             throw new \RuntimeException(sprintf("Could not write ServiceConfiguration to '%s'",
                         $this->serviceConfigurationFile));
@@ -120,6 +136,91 @@ EXC
         }
 
         $dom->save($targetPath . '/ServiceConfiguration.cscfg');
+    }
+
+    /**
+     * Add a configuration setting to the ServiceConfiguration.cscfg
+     *
+     * @param string $name
+     * @param string $value
+     */
+    public function setConfigurationSetting($roleName, $name, $value)
+    {
+        $namespaceUri = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
+        $xpath = new \DOMXpath($this->dom);
+        $xpath->registerNamespace('sc', $namespaceUri);
+
+        $xpathExpression = '//sc:Role[@name="' . $roleName . '"]//sc:ConfigurationSettings//sc:Setting[@name="' . $name . '"]';
+        $settingList     = $xpath->evaluate($xpathExpression);
+
+        if ($settingList->length == 1) {
+            $settingNode = $settingList->item(0);
+        } else {
+            $settingNode = $this->dom->createElementNS($namespaceUri, 'Setting');
+            $settingNode->setAttribute('name', $name);
+
+            $configSettingList = $xpath->evaluate('//sc:Role[@name="' . $roleName . '"]/sc:ConfigurationSettings');
+
+            if ($configSettingList->length == 0) {
+                throw new \RuntimeException("Cannot find <ConfigurationSettings /> in Role '" . $roleName . "'.");
+            }
+
+            $configSettings = $configSettingList->item(0);
+            $configSettings->appendChild($settingNode);
+        }
+
+        $settingNode->setAttribute('value', $value);
+
+        $this->save();
+    }
+
+    /**
+     * Add Certificate to the Role
+     *
+     * @param string $roleName
+     * @param RemoteDesktopCertificate $certificate
+     */
+    public function addCertificate($roleName, RemoteDesktopCertificate $certificate)
+    {
+        $namespaceUri = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
+        $xpath = new \DOMXpath($this->dom);
+        $xpath->registerNamespace('sc', $namespaceUri);
+
+        $xpathExpression = '//sc:Role[@name="' . $roleName . '"]//sc:Certificates';
+        $certificateList = $xpath->evaluate($xpathExpression);
+
+        if ($certificateList->length == 1) {
+            $certificatesNode = $certificateList->item(0);
+
+            foreach ($certificatesNode->childNodes as $certificateNode) {
+                $certificatesNode->removeElement($certificateNode);
+            }
+        } else {
+            $certificatesNode = $this->dom->createElementNS($namespaceUri, 'Certificates');
+
+            $roleNodeList = $xpath->evaluate('//sc:Role[@name="' . $roleName . '"]');
+
+            if ($roleNodeList->length == 0) {
+                throw new \RuntimeException("No Role found with name '" . $roleName . "'.");
+            }
+
+            $roleNode = $roleNodeList->item(0);
+            $roleNode->appendChild($certificatesNode);
+        }
+
+        $certificateNode = $this->dom->createElementNS($namespaceUri, 'Certificate');
+        $certificateNode->setAttribute('name', 'Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption');
+        $certificateNode->setAttribute('thumbprint', $certificate->getThumbprint());
+        $certificateNode->setAttribute('thumbprintAlgorithm', 'sha1');
+
+        $certificatesNode->appendChild($certificateNode);
+
+        $this->save();
+    }
+
+    public function getXml()
+    {
+        return $this->dom->saveXml();
     }
 }
 

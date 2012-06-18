@@ -44,9 +44,32 @@ class InitCommand extends ContainerAwareCommand
             throw new \RuntimeException("Azure is already initialized for this Symfony project.");
         }
 
-        $deployment->create();
-        $deployment->createRole('Sf2.Web');
+        $roleName = 'Sf2.Web';
 
-        $output->writeln('<info>Created basic Azure structure and one WebRole "SymfonyWeb"</info>');
+        $deployment->create();
+        $deployment->createRole($roleName);
+
+        $output->writeln(sprintf('<info>Created basic Azure structure and one WebRole "%s"</info>', $roleName));
+        $output->writeln('Next steps:');
+        $output->writeln('- Take a look into the app\azure Folder, it contains Azure related files.');
+        $output->writeln('- See the app\config\parameters_azure.yml and app\config\config_azure.yml');
+        $output->writeln('- Run the packaging command "windowsazure:package"');
+
+        if (extension_loaded('openssl')) {
+            $length          = 16;
+            $keyPassword     = base64_encode(openssl_random_pseudo_bytes(8, $strong));
+            $keyPassword     = substr($keyPassword, 0, $length);
+            $desktopPassword = base64_encode(openssl_random_pseudo_bytes(8, $strong));
+            $desktopPassword = substr($desktopPassword, 0, $length);
+
+            $deployment->generateRemoteDesktopKey($roleName, $desktopPassword, $keyPassword);
+
+            $output->writeln('');
+            $output->writeln('Automatically created certificates to open a remote desktop to this role.');
+            $output->writeln('Private Key Password: <info>' . $keyPassword . '</info>');
+            $output->writeln('RemoteDesktop Password: <info>' . $desktopPassword . '</info>');
+            $output->writeln('<comment>Write these passwords down, you need them during deployment.</comment>');
+            $output->writeln('You can disable RemoteDesktop in ServiceConfiguration.cscfg');
+        }
     }
 }
