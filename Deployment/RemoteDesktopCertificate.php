@@ -73,7 +73,7 @@ class RemoteDesktopCertificate
     public function export($directory, $filePrefix, $keyPassword, $overwrite = false)
     {
         if ( ! is_writeable($directory)) {
-            throw new \RuntimeException("Not a writable directory.");
+            throw new \RuntimeException("Key Export directory is not writable: " . $directory);
         }
 
         $pkcs12File = $directory . "/" . $filePrefix . ".pfx";
