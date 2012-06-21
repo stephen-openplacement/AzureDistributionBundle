@@ -113,7 +113,7 @@ class AzureSDKCommandBuilder
         }
 
         $programDirectories = array('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432');
-        $binDirectories = array('Windows Azure SDK\*\bin', 'Windows Azure Emulator\emulator');
+        $binDirectories = array('Windows Azure SDK\*\bin', 'Microsoft SDKs\Windows Azure\.NET SDK\*\bin', 'Windows Azure Emulator\emulator');
         foreach ($programDirectories as $programDirectory) {
             if (isset($_SERVER[$programDirectory])) {
                 $programDirectory = $_SERVER[$programDirectory];
