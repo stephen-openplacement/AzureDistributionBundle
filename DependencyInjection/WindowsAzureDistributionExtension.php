@@ -43,6 +43,12 @@ class WindowsAzureDistributionExtension extends Extension
         $this->loadServices($config, $container);
     }
 
+    /**
+     * Create services from PHP Azure SDK (Blob, Table, Queue, ServiceManagement, ServiceBus).
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
     protected function loadServices($config, $container)
     {
         if ( ! isset($config['services'])) {
