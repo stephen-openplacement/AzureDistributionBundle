@@ -1,6 +1,6 @@
 ---
 title: Installation
-layout: minimal
+layout: default
 ---
 
 # Installation

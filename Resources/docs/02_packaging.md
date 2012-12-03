@@ -1,6 +1,6 @@
 ---
 title: Packaging
-layout: minimal
+layout: default
 ---
 
 # Packaging
