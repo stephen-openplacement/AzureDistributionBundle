@@ -1,6 +1,6 @@
 ---
 title: Deploying assets on Azure
-layout: minimal
+layout: default
 ---
 
 # Assets
