@@ -3,8 +3,10 @@
 namespace WindowsAzure\DistributionBundle\Tests\Blob;
 
 use WindowsAzure\Common\ServicesBuilder;
+use WindowsAzure\Blob\Models\ListContainersOptions;
+use WindowsAzure\DistributionBundle\Blob\Stream;
 
-class BlobStreamTest extends \PHPUnit_Framework_TestCase
+class BlobTest extends \PHPUnit_Framework_TestCase
 {
     const CONTAINER_PREFIX = 'aztest';
 
@@ -12,18 +14,16 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
     protected static $uniqId;
     protected static $uniqStart;
 
-    /**
-     * Test setup
-     */
     protected function setUp()
     {
         self::$path = dirname(__FILE__).'/_files/';
         date_default_timezone_set('UTC');
+
+        if (in_array('azure', stream_get_wrappers())) {
+            stream_wrapper_unregister('azure');
+        }
     }
 
-    /**
-     * Test teardown
-     */
     protected function tearDown()
     {
         $blobClient = $this->createBlobClient();
@@ -33,19 +33,22 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
             } catch (\Exception $e) {
             }
         }
-
-        if (in_array('azure', stream_get_wrappers())) {
-            stream_wrapper_unregister('azure');
-        }
     }
 
     protected function createBlobClient()
     {
         if ( ! isset($GLOBALS['AZURE_BLOB_CONNECTION'])) {
-            $this->markTestSkipped("Configure <php><var name=\"AZURE_BLOB_CONNECTION\" value=\"\"></php> to run the blob stream tests.");
+            $this->markTestSkipped("Configure <php><var name=\"AZURE_BLOB_CONNECTION\" value=\"\"></php> to run the blob  tests.");
         }
 
-        return ServicesBuilder::getInstance()->createBlobService($GLOBALS['AZURE_BLOB_CONNECTION']);
+        $proxy = ServicesBuilder::getInstance()->createBlobService($GLOBALS['AZURE_BLOB_CONNECTION']);
+
+        if (in_array('azure', stream_get_wrappers())) {
+            stream_wrapper_unregister('azure');
+        }
+        Stream::register($proxy, 'azure');
+
+        return $proxy;
     }
 
     protected function generateName()
@@ -65,7 +68,6 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $fileName = 'azure://' . $containerName . '/test.txt';
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
         $fh = fopen($fileName, 'w');
         fwrite($fh, "Hello world!");
@@ -85,14 +87,13 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $fileName = 'azure://' . $containerName . '/test.txt';
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
         $fh = fopen($fileName, 'w');
         fwrite($fh, "Hello world!");
         fclose($fh);
 
-        $instance = $blobClient->getBlobInstance($containerName, 'test.txt');
-        $this->assertEquals('test.txt', $instance->Name);
+        $instance = $blobClient->getBlobProperties($containerName, 'test.txt');
+        $this->assertEquals(12, $instance->getProperties()->getContentLength());
     }
 
     /**
@@ -104,7 +105,6 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $fileName = 'azure://' . $containerName . '/test.txt';
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
         $fh = fopen($fileName, 'w');
         fwrite($fh, "Hello world!");
@@ -113,7 +113,7 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         unlink($fileName);
 
         $result = $blobClient->listBlobs($containerName);
-        $this->assertEquals(0, count($result));
+        $this->assertEquals(0, count($result->getBlobs()));
     }
 
     /**
@@ -126,7 +126,6 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $destinationFileName = 'azure://' . $containerName . '/test2.txt';
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
         $fh = fopen($sourceFileName, 'w');
         fwrite($fh, "Hello world!");
@@ -134,8 +133,8 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
 
         copy($sourceFileName, $destinationFileName);
 
-        $instance = $blobClient->getBlobInstance($containerName, 'test2.txt');
-        $this->assertEquals('test2.txt', $instance->Name);
+        $instance = $blobClient->getBlobProperties($containerName, 'test2.txt');
+        $this->assertEquals(12, $instance->getProperties()->getContentLength());
     }
 
     /**
@@ -148,7 +147,6 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $destinationFileName = 'azure://' . $containerName . '/test2.txt';
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
         $fh = fopen($sourceFileName, 'w');
         fwrite($fh, "Hello world!");
@@ -168,16 +166,18 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $containerName = $this->generateName();
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
-        $current = count($blobClient->listContainers());
+        $current = count($blobClient->listContainers()->getContainers());
 
         mkdir('azure://' . $containerName);
 
-        $after = count($blobClient->listContainers());
+        $after = count($blobClient->listContainers()->getContainers());
 
         $this->assertEquals($current + 1, $after, "One new container should exist");
-        $this->assertTrue($blobClient->containerExists($containerName));
+
+        $options = new ListContainersOptions();
+        $options->setPrefix($containerName);
+        $this->assertEquals(1, count($blobClient->listContainers($options)->getContainers()));
     }
 
     /**
@@ -188,14 +188,15 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $containerName = $this->generateName();
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
         mkdir('azure://' . $containerName);
         rmdir('azure://' . $containerName);
 
-        $result = $blobClient->listContainers();
+        $options = new ListContainersOptions();
+        $options->setPrefix($containerName);
+        $result = $blobClient->listContainers($options);
 
-        $this->assertFalse($blobClient->containerExists($containerName));
+        $this->assertEquals(0, count($result->getContainers()));
     }
 
     /**
@@ -207,15 +208,13 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $blobClient = $this->createBlobClient();
         $blobClient->createContainer($containerName);
 
-        $blobClient->putBlob($containerName, 'images/WindowsAzure1.gif', self::$path . 'WindowsAzure.gif');
-        $blobClient->putBlob($containerName, 'images/WindowsAzure2.gif', self::$path . 'WindowsAzure.gif');
-        $blobClient->putBlob($containerName, 'images/WindowsAzure3.gif', self::$path . 'WindowsAzure.gif');
-        $blobClient->putBlob($containerName, 'images/WindowsAzure4.gif', self::$path . 'WindowsAzure.gif');
-        $blobClient->putBlob($containerName, 'images/WindowsAzure5.gif', self::$path . 'WindowsAzure.gif');
+        $blobClient->createBlockBlob($containerName, 'images/WindowsAzure1.gif', file_get_contents(self::$path . 'WindowsAzure.gif'));
+        $blobClient->createBlockBlob($containerName, 'images/WindowsAzure2.gif', file_get_contents(self::$path . 'WindowsAzure.gif'));
+        $blobClient->createBlockBlob($containerName, 'images/WindowsAzure3.gif', file_get_contents(self::$path . 'WindowsAzure.gif'));
+        $blobClient->createBlockBlob($containerName, 'images/WindowsAzure4.gif', file_get_contents(self::$path . 'WindowsAzure.gif'));
+        $blobClient->createBlockBlob($containerName, 'images/WindowsAzure5.gif', file_get_contents(self::$path . 'WindowsAzure.gif'));
 
-        $result1 = $blobClient->listBlobs($containerName);
-
-        $blobClient->registerStreamWrapper();
+        $result1 = $blobClient->listBlobs($containerName)->getBlobs();
 
         $result2 = array();
         if ($handle = opendir('azure://' . $containerName)) {
@@ -224,8 +223,6 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
             }
             closedir($handle);
         }
-
-        $result = $blobClient->listContainers();
 
         $this->assertEquals(count($result1), count($result2));
     }
@@ -247,7 +244,6 @@ class BlobStreamTest extends \PHPUnit_Framework_TestCase
         $fileName = 'azure://' . $containerName . $file;
 
         $blobClient = $this->createBlobClient();
-        $blobClient->registerStreamWrapper();
 
         $fh = fopen($fileName, 'w');
         fwrite($fh, "Hello world!");
