@@ -58,8 +58,7 @@
         <exec output="packaging.markdown" executable="git"><arg line="show master:Resources/docs/02_packaging.md" /></exec>
         <exec output="session.markdown" executable="git"><arg line="show master:Resources/docs/03_session.md" /></exec>
         <exec output="azure_env.markdown" executable="git"><arg line="show master:Resources/docs/04_azure_environment.md" /></exec>
-        <exec output="storage.markdown" executable="git"><arg line="show master:Resources/docs/04_storage.md" /></exec>
-        <exec output="table.markdown" executable="git"><arg line="show master:Resources/docs/05_table.md" /></exec>
+        <exec output="phpsdk.markdown" executable="git"><arg line="show master:Resources/docs/05_phpsdk.md" /></exec>
         <exec output="sharding.markdown" executable="git"><arg line="show master:Resources/docs/06_sharding.md" /></exec>
         <exec output="assets.markdown" executable="git"><arg line="show master:Resources/docs/07_assets.md" /></exec>
         <exec output="logging.markdown" executable="git"><arg line="show master:Resources/docs/09_logging.md" /></exec>

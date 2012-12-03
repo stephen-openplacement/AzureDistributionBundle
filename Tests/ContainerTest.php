@@ -36,6 +36,39 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('WindowsAzure\DistributionBundle\Deployment\AzureDeployment', $deployment);
     }
 
+    public function testServices()
+    {
+        $config = array(
+            'services' => array(
+                'blob' => array(
+                    'test' => 'UseDevelopmentStorage=true',
+                ),
+                'queue' => array(
+                    'test2' => 'DefaultEndpointsProtocol=[http|https];AccountName=[yourAccount];AccountKey=[yourKey]'
+                ),
+                'table' => array(
+                    'test3' => 'DefaultEndpointsProtocol=[http|https];AccountName=[yourAccount];AccountKey=[yourKey]'
+                ),
+                'service_bus' => array(
+                    'test4' => 'Endpoint=[yourEndpoint];SharedSecretIssuer=[yourWrapAuthenticationName];SharedSecretValue=[yourWrapPassword]',
+                ),
+                'management' => array(
+                    'test5' => 'SubscriptionID=[yourSubscriptionId];CertificatePath=[filePathToYourCertificate]',
+                ),
+            ),
+        );
+
+        $container = $this->createContainer($config);
+
+        $this->assertTrue($container->has('windows_azure.blob.test'));
+        $this->assertTrue($container->has('windows_azure.queue.test2'));
+        $this->assertTrue($container->has('windows_azure.table.test3'));
+        $this->assertTrue($container->has('windows_azure.service_bus.test4'));
+        $this->assertTrue($container->has('windows_azure.management.test5'));
+
+        $this->assertInstanceOf('WindowsAzure\Blob\BlobRestProxy', $container->get('windows_azure.blob.test'));
+    }
+
     public function testSessionStorage()
     {
         $config = array(
@@ -57,23 +90,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $def = $container->findDefinition('windows_azure_distribution.session.pdo');
         $args = $def->getArguments();
         $this->assertEquals('sqlsrv:server=localhost;Database=db', $args[0]);
-    }
-
-    public function testBlobStorages()
-    {
-        $config = array(
-            'blob_storage' => array(
-                'test' => array('account' => 'test', 'key' => 'test', 'stream' => 'teststream'),
-                'test2' => array('account' => 'test2', 'key' => 'test2', 'stream' => 'teststream2'),
-            )
-        );
-
-        $container = $this->createContainer($config);
-        $def = $container->findDefinition('windows_azure_distribution.storage_registry');
-
-        $calls = $def->getMethodCalls();
-
-        $this->assertEquals(2, count($calls));
     }
 
     public function createContainer(array $config = array())
