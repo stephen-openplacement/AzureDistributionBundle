@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: minimal
 title: Quickstart
 ---
 
@@ -23,7 +23,7 @@ Prerequisites:
         windowsazure:init
         windowsazure:package
 
-3. Call `php app\console windowsazure:init`. The result should show that a Webrole was generated and display two passwords for the Remote Desktoping feature. Note down both passwords, you need them during deployment. If an error occurs during the key generation, take a look at the [OpenSSL](http://php.net/manual/en/openssl.installation.php) Installation notes and setup an `openssl.cnf`.
+3. Call `php app\console windowsazure:init`. The result should show that a Webrole was generated and display two passwords for the Remote Desktoping feature. Note down both passwords, you need them during deployment. If an error occurs during the key generation, take a look at the [OpenSSL](http://php.net/manual/en/openssl.installation.php) Installation notes.
 
 4. Configure the database by modifying `app\config\parameters_azure.yml`.
 
@@ -38,6 +38,8 @@ Prerequisites:
             database_user: USER@DBID
             database_password: PWD
             database_name: DBNAME
+
+    If you have not done it already, you need to create an SQL Server database in the Management console at this step.
 
 5. Configure Security
 
@@ -89,7 +91,7 @@ Prerequisites:
 
 9. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
 
-10. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console. If the Remote Desktop keys were generated successfully, add the certifcate file from `app\azure\Sf2.Web.pfx`.
+10. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console. If the Remote Desktop keys were generated successfully, add the certifcate file from `app\azure\Sf2.Web.pfx` in the Certificate Tab.
 
 11. Import the contents of the "schema.sql" from vendor\azure\WindowsAzure\TaskDemoBundle\Resources\schema.sql into your SQL Azure database.
 

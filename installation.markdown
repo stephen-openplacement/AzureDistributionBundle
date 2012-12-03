@@ -1,11 +1,11 @@
 ---
 title: Installation
-layout: default
+layout: minimal
 ---
 
 # Installation
 
-Prerequisites for this bundle are a Windows development machine with the Windows Azure SDK installed. You don't need the PHP SDK to run this bundle.
+Prerequisites for this bundle are a Windows development machine with the Windows Azure SDK installed. 
 
 You can either install the SDK through [Web Platform Installer](http://azurephp.interoperabilitybridges.com/articles/setup-the-windows-azure-development-environment-automatically-with-the-microsoft-web-platform-installer) or all [dependencies manually](http://azurephp.interoperabilitybridges.com/articles/setup-the-windows-azure-development-environment-manually).
 

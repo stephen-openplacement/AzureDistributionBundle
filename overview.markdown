@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: minimal
 title: Overview
 ---
 
@@ -10,7 +10,7 @@ Cloud-Services put constraints on how an application is allowed to run on their 
 * Command for packaging applications for Windows Azure (Done)
 * Startup tasks for cache:clear/cache:warmup are invoked for new instances. (Done)
 * Writing cache and log-files into a writable directory. (Done)
-* Distributed sessions 
+* Distributed sessions
    * PDO (Done)
    * Azure Table
 * Specific 'azure' environment that is inherits from prod. (Done)
