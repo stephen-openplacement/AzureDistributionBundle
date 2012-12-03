@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: minimal
 title: PHP Azure SDK Services
 ---
 
