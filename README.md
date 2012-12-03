@@ -6,3 +6,13 @@ Bundle provides tools to deploy a Symfony2 based application on Windows Azure. T
 
 * [Documentation](http://beberlei.github.com/AzureDistributionBundle)
 
+## Roadmap
+
+* Integrate new PHP SDK
+* Blob as a Stream in New SDK
+* Deployment on Azure Websites
+    * Composer Prototype (PHP based)
+    * Composer Support on https://github.com/projectkudu/kudu
+* Rebuild documentation
+    * New SDK
+    * Azure Websites + Composer
