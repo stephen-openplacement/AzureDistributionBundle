@@ -16,7 +16,7 @@ namespace WindowsAzure\DistributionBundle\Deployment\Assets;
 /**
  * Serve assets from the webrole.
  */
-class WebRoleStrategy extends AssetStrategy
+class LocalStrategy extends AssetStrategy
 {
     public function deploy($documentRoot, $buildNumber)
     {

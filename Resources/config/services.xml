@@ -14,7 +14,7 @@
         <parameter key="windows_azure_distribution.deployment.azure_sdk_command_builder.class">WindowsAzure\DistributionBundle\Deployment\AzureSDKCommandBuilder</parameter>
         <parameter key="windows_azure_distribution.deployment.class">WindowsAzure\DistributionBundle\Deployment\AzureDeployment</parameter>
         <parameter key="windows_azure_distribution.cache_warmer.dbtable.class">WindowsAzure\DistributionBundle\CacheWarmer\DbSessionTable</parameter>
-        <parameter key="windows_azure_distribution.assets.webrole.class">WindowsAzure\DistributionBundle\Deployment\Assets\WebRoleStrategy</parameter>
+        <parameter key="windows_azure_distribution.assets.local.class">WindowsAzure\DistributionBundle\Deployment\Assets\LocalStrategy</parameter>
         <parameter key="windows_azure_distribution.assets.blob.class">WindowsAzure\DistributionBundle\Deployment\Assets\BlobStrategy</parameter>
         <parameter key="windows_azure_distribution.session_storage.pdo.class">Symfony\Component\HttpFoundation\SessionStorage\PdoSessionStorage</parameter>
 
@@ -40,7 +40,7 @@
             <argument>%windows_azure_distribution.config.diagnostics.storage%</argument>
         </service>
 
-        <service id="windows_azure_distribution.assets.webrole" class="%windows_azure_distribution.assets.webrole.class%">
+        <service id="windows_azure_distribution.assets.local" class="%windows_azure_distribution.assets.local.class%">
             <argument type="service" id="service_container" />
         </service>
         <service id="windows_azure_distribution.assets.blob" class="%windows_azure_distribution.assets.blob.class%">
