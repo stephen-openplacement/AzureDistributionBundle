@@ -16,6 +16,7 @@ namespace WindowsAzure\DistributionBundle\Blob;
 use WindowsAzure\Blob\BlobRestProxy;
 use WindowsAzure\Blob\Models\ListContainersOptions;
 use WindowsAzure\Common\ServiceException;
+use Exception;
 
 /**
  * Stream Wrapper implementation for Windows Azure Blob Storage
@@ -147,6 +148,12 @@ class Stream
     public function stream_open($path, $mode, $options, &$opened_path)
     {
         $this->fileName = $path;
+        $blobName       = $this->getFileName($this->fileName);
+
+        if (empty($blobName)) {
+            throw new BlobException("Empty blob path name given. Has to be a full filename.");
+        }
+
         // Write mode?
         if (strpbrk($mode, 'wax+')) {
             $this->writeMode = true;
@@ -223,7 +230,7 @@ class Stream
                     $this->getFileName($this->fileName),
                     fopen($this->temporaryFileName, "r")
                 );
-            } catch (BlobException $ex) {
+            } catch (Exception $ex) {
                 $this->cleanup();
 
                 throw $ex;
@@ -321,7 +328,7 @@ class Stream
                     $this->getFileName($this->fileName),
                     $this->temporaryFileHandle
                 );
-            } catch (BlobException $ex) {
+            } catch (Exception $ex) {
                 @unlink($this->temporaryFileName);
                 unset($this->storageClient);
 
@@ -377,15 +384,15 @@ class Stream
             throw new BlobException('Container name can not be changed.');
         }
 
-        if ($this->getFileName($path_from) == $this->getContainerName($path_to)) {
+        if ($this->getFileName($path_from) == $this->getFileName($path_to)) {
             return true;
         }
 
         $this->getStorageClient($path_from)->copyBlob(
-            $this->getContainerName($path_from),
-            $this->getFileName($path_from),
             $this->getContainerName($path_to),
-            $this->getFileName($path_to)
+            $this->getFileName($path_to),
+            $this->getContainerName($path_from),
+            $this->getFileName($path_from)
         );
         $this->getStorageClient($path_from)->deleteBlob(
             $this->getContainerName($path_from),
@@ -439,7 +446,7 @@ class Stream
             $stat['mode'] = 0100000;
 
             return array_values($stat) + $stat;
-        } catch (ServiceException $ex) {
+        } catch (Exception $ex) {
             // Unexisting file...
             return false;
         }
@@ -455,18 +462,18 @@ class Stream
      */
     public function mkdir($path, $mode, $options)
     {
-        if ($this->getContainerName($path) == $this->getFileName($path)) {
-            // Create container
-            try {
-                $this->getStorageClient($path)->createContainer(
-                    $this->getContainerName($path)
-                );
-                return true;
-            } catch (BlobException $ex) {
-                return false;
-            }
-        } else {
+        if ($this->getContainerName($path) != $this->getFileName($path)) {
             throw new BlobException('mkdir() with multiple levels is not supported on Windows Azure Blob Storage.');
+        }
+
+        // Create container
+        try {
+            $this->getStorageClient($path)->createContainer(
+                $this->getContainerName($path)
+            );
+            return true;
+        } catch (Exception $ex) {
+            return false;
         }
     }
 
@@ -479,21 +486,21 @@ class Stream
      */
     public function rmdir($path, $options)
     {
-        if ($this->getContainerName($path) == $this->getFileName($path)) {
+        if ($this->getContainerName($path) != $this->getFileName($path)) {
+            throw new BlobException('rmdir() with multiple levels is not supported on Windows Azure Blob Storage.');
+        }
+
+        // Delete container
+        try {
+            $this->getStorageClient($path)->deleteContainer(
+                $this->getContainerName($path)
+            );
+
             // Clear the stat cache so that affected paths are refreshed.
             clearstatcache();
-
-            // Delete container
-            try {
-                $this->getStorageClient($path)->deleteContainer(
-                    $this->getContainerName($path)
-                );
-                return true;
-            } catch (BlobException $ex) {
-                return false;
-            }
-        } else {
-            throw new BlobException('rmdir() with multiple levels is not supported on Windows Azure Blob Storage.');
+            return true;
+        } catch (Exception $ex) {
+            return false;
         }
     }
 

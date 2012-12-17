@@ -59,6 +59,13 @@ class BlobTest extends \PHPUnit_Framework_TestCase
         self::$uniqId++;
         return self::CONTAINER_PREFIX . self::$uniqId;
     }
+
+    public function testGetUnknownClient()
+    {
+        $this->setExpectedException('WindowsAzure\DistributionBundle\Blob\BlobException');
+        Stream::getClient('unknown');
+    }
+
     /**
      * Test read file
      */
@@ -71,11 +78,37 @@ class BlobTest extends \PHPUnit_Framework_TestCase
 
         $fh = fopen($fileName, 'w');
         fwrite($fh, "Hello world!");
+        $pos = ftell($fh);
+        fseek($fh, 0);
+        fwrite($fh, "Hello world!");
         fclose($fh);
 
         $result = file_get_contents($fileName);
 
         $this->assertEquals('Hello world!', $result);
+        $this->assertEquals(12, $pos);
+    }
+
+    public function testReadUnknownFile()
+    {
+        $containerName = $this->generateName();
+        $fileName = 'azure://' . $containerName . '/test.txt';
+
+        $blobClient = $this->createBlobClient();
+
+        $this->setExpectedException('WindowsAzure\Common\ServiceException');
+        $result = file_get_contents($fileName);
+    }
+
+    public function testWriteInvalidFile()
+    {
+        $containerName = $this->generateName();
+        $fileName = 'azure://' . $containerName . '/';
+
+        $blobClient = $this->createBlobClient();
+
+        $this->setExpectedException('WindowsAzure\DistributionBundle\Blob\BlobException', 'Empty blob path name given. Has to be a full filename.');
+        $fh = fopen($fileName, 'w');
     }
 
     /**
@@ -137,6 +170,37 @@ class BlobTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(12, $instance->getProperties()->getContentLength());
     }
 
+    public function testRenameChangeContainerInvalid()
+    {
+        $containerName = $this->generateName();
+        $containerName2 = $this->generateName();
+
+        $sourceFileName = 'azure://' . $containerName . '/test.txt';
+        $destinationFileName = 'azure://' . $containerName2 . '/test2.txt';
+
+        $blobClient = $this->createBlobClient();
+
+        $this->setExpectedException('WindowsAzure\DistributionBundle\Blob\BlobException', 'Container name can not be changed.');
+        rename($sourceFileName, $destinationFileName);
+    }
+
+    public function testRenameSameName()
+    {
+        $containerName = $this->generateName();
+        $sourceFileName = 'azure://' . $containerName . '/test.txt';
+        $destinationFileName = 'azure://' . $containerName . '/test.txt';
+
+        $blobClient = $this->createBlobClient();
+
+        $fh = fopen($sourceFileName, 'w');
+        fwrite($fh, "Hello world!");
+        fclose($fh);
+
+        rename($sourceFileName, $destinationFileName);
+
+        $this->assertEquals('Hello world!', file_get_contents($destinationFileName));
+    }
+
     /**
      * Test rename file
      */
@@ -154,8 +218,8 @@ class BlobTest extends \PHPUnit_Framework_TestCase
 
         rename($sourceFileName, $destinationFileName);
 
-        $instance = $blobClient->getBlobInstance($containerName, 'test2.txt');
-        $this->assertEquals('test2.txt', $instance->Name);
+        $this->assertEquals('Hello world!', file_get_contents($destinationFileName));
+        $this->assertFalse(file_exists($sourceFileName));
     }
 
     /**
@@ -180,6 +244,18 @@ class BlobTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($blobClient->listContainers($options)->getContainers()));
     }
 
+    public function testMkdirMulptileLevelsNotAllowed()
+    {
+        $containerName = $this->generateName();
+
+        $blobClient = $this->createBlobClient();
+
+        $current = count($blobClient->listContainers()->getContainers());
+
+        $this->setExpectedException('WindowsAzure\DistributionBundle\Blob\BlobException', 'mkdir() with multiple levels is not supported on Windows Azure Blob Storage.');
+        mkdir('azure://' . $containerName. '/foo');
+    }
+
     /**
      * Test rmdir
      */
@@ -197,6 +273,16 @@ class BlobTest extends \PHPUnit_Framework_TestCase
         $result = $blobClient->listContainers($options);
 
         $this->assertEquals(0, count($result->getContainers()));
+    }
+
+    public function testRmdirWithMultipleLevelsNotAllowed()
+    {
+        $containerName = $this->generateName();
+
+        $blobClient = $this->createBlobClient();
+
+        $this->setExpectedException('WindowsAzure\DistributionBundle\Blob\BlobException', 'rmdir() with multiple levels is not supported on Windows Azure Blob Storage.');
+        rmdir('azure://' . $containerName . '/foo');
     }
 
     /**
