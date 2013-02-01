@@ -41,6 +41,27 @@ class WindowsAzureDistributionExtension extends Extension
         $this->loadAsset($config['assets'], $container);
         $this->loadSharding($config, $container);
         $this->loadServices($config, $container);
+        $this->loadKeyValueStore($config, $container, $loader);
+    }
+
+    /**
+     * Create the services for Doctrine KeyValueStore with Windows Azure
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param XmlFileLoader $loader
+     */
+    protected function loadKeyValueStore($config, $container, $loader)
+    {
+        if (empty($config['key_value_store']['connection_name'])) {
+            return;
+        }
+
+        $loader->load('keyvaluestore.xml');
+        $container->setAlias(
+            'windows_azure_distribution.key_value_store.storage_client',
+            'windows_azure.table.' . $config['key_value_store']['connection_name']
+        );
     }
 
     /**

@@ -92,6 +92,25 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sqlsrv:server=localhost;Database=db', $args[0]);
     }
 
+    public function testKeyValueStore()
+    {
+        $config = array(
+            'services' => array(
+                'table' => array(
+                    'test' => 'DefaultEndpointsProtocol=[http|https];AccountName=[yourAccount];AccountKey=[yourKey]'
+                ),
+            ),
+            'key_value_store' => array(
+                'connection_name' => 'test'
+            )
+        );
+
+        $container = $this->createContainer($config);
+
+        $this->assertTrue($container->has('windows_azure_distribution.key_value_store.entity_manager'));
+        $this->assertTrue($container->has('windows_azure_distribution.key_value_store.storage_client'));
+    }
+
     public function createContainer(array $config = array())
     {
         $container = new ContainerBuilder(new ParameterBag(array(
