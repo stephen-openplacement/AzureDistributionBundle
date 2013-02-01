@@ -13,24 +13,37 @@
 
 namespace WindowsAzure\DistributionBundle\Deployment\Assets;
 
-use Beberlei\AzureBlobStorage\BlobClient;
 use WindowsAzure\DistributionBundle\Filesystem\AzureFilesystem;
+use WindowsAzure\DistributionBundle\Blob\Stream;
+use WindowsAzure\Blob\BlobRestProxy;
 
 /**
  * Serve assets from blob storage
  */
 class BlobStrategy extends AssetStrategy
 {
+    /**
+     * @var string
+     */
+    const STREAM = 'azureassets';
+
+    /**
+     * @var BlobRestProxy
+     */
+    private $client;
+
+    public function __construct($container, BlobRestProxy $client)
+    {
+        parent::__construct($container);
+
+        $this->client = $client;
+    }
+
     public function deploy($documentRoot, $buildNumber)
     {
-        $client = new BlobClient(
-            sprintf('http://%s.blob.core.windows.net', $this->container->getParameter('windows_azure_distribution.assets.account_name')),
-            $this->container->getParameter('windows_azure_distribution.assets.account_name'),
-            $this->container->getParameter('windows_azure_distribution.assets.account_key')
-        );
-        $client->registerStreamWrapper('azureassets');
+        Stream::register($this->client, self::STREAM);
 
-        $this->moveTo('azureassets://v' . $buildNumber);
+        $this->moveTo(self::STREAM . '://v' . $buildNumber);
     }
 
     protected function getFilesystem()

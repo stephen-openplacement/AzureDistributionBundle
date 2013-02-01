@@ -36,6 +36,7 @@ class WindowsAzureDistributionExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('windows_azure_distribution.config.deployment', $config['deployment']);
+        $container->setParameter('windows_azure_distribution.streams', $config['streams']);
 
         $this->loadSession($config, $container);
         $this->loadAsset($config['assets'], $container);
@@ -120,12 +121,7 @@ class WindowsAzureDistributionExtension extends Extension
                 $container->setAlias('windows_azure_distribution.assets', 'windows_azure_distribution.assets.webrole');
                 break;
             case 'blob':
-                if ( !isset($assetConfig['accountName']) || !isset($assetConfig['accountKey'])) {
-                    throw new \RuntimeException("assets.accountName and assets.accountKey are required options for blob asset deployment.");
-                }
-
-                $container->setParameter('windows_azure_distribution.assets.account_name', $assetConfig['accountName']);
-                $container->setParameter('windows_azure_distribution.assets.account_key', $assetConfig['accountKey']);
+                $container->setAlias('windows_azure_distribution.assets.blob.storage', 'windows_azure.blob.' . $assetConfig['connection_name']);
                 $container->setAlias('windows_azure_distribution.assets', 'windows_azure_distribution.assets.blob');
 
                 break;

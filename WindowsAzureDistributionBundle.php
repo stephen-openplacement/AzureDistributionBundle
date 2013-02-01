@@ -15,13 +15,23 @@ namespace WindowsAzure\DistributionBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use WindowsAzure\DistributionBundle\DependencyInjection\CompilerPass\ShardingPass;
+use WindowsAzure\DistributionBundle\Blob\Stream;
 
 class WindowsAzureDistributionBundle extends Bundle
 {
     public function boot()
     {
         parent::boot();
+
+        $streams = $this->container->getParameter('windows_azure_distribution.streams');
+
+        foreach ($streams as $streamName => $clientName) {
+            $client = $this->container->get('windows_azure.blob.' . $clientName);
+
+            Stream::register($client, $streamName);
+        }
     }
 
     public function build(ContainerBuilder $container)
@@ -30,6 +40,5 @@ class WindowsAzureDistributionBundle extends Bundle
 
         $container->addCompilerPass(new ShardingPass());
     }
-
 }
 

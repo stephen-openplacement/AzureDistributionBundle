@@ -111,6 +111,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->has('windows_azure_distribution.key_value_store.storage_client'));
     }
 
+    public function testStreams()
+    {
+        $config = array('streams' => array('foo' => 'bar'));
+
+        $container = $this->createContainer($config);
+
+        $this->assertEquals(array('foo' => 'bar'), $container->getParameter('windows_azure_distribution.streams'));
+    }
+
     public function createContainer(array $config = array())
     {
         $container = new ContainerBuilder(new ParameterBag(array(
