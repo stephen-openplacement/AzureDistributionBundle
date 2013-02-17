@@ -55,8 +55,10 @@ class AssetsDeployCommand extends ContainerAwareCommand
         }
 
         $output->writeln('Compiling assets for build ' . $buildNumber);
+        $targetDir = $kernelRoot . "/../web";
 
         $webRoleStrategy = $this->getContainer()->get('windows_azure_distribution.assets');
-        $webRoleStrategy->deploy($kernelRoot . "/../web", $buildNumber);
+        $webRoleStrategy->deploy($targetDir, $buildNumber);
     }
 }
+
