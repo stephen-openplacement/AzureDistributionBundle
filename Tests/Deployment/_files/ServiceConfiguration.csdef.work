@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" serviceName="SymfonyOnAzure" osFamily="2" osVersion="*">
+    <Role name="Sf2.Web">
+        <Instances count="1"/>
+        <ConfigurationSettings>
+        </ConfigurationSettings>
+    <Certificates><Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="f44862f3e845ee189d57ed5a5e24de92f9f0c354" thumbprintAlgorithm="sha1"/></Certificates></Role>
+</ServiceConfiguration>

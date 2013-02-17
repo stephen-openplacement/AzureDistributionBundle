@@ -1,5 +1,5 @@
 ---
-title: Deploying assets on Azure
+title: Deploying assets on Azure Cloud Services
 layout: default
 ---
 
@@ -17,8 +17,7 @@ To use Azure Blog storage add the following configuration to your `config.yml`:
     windows_azure_distribution:
         assets:
             type: blob
-            accountName: acc
-            accountKey: pw1
+            connection_name: test
 
 During packaging the Azure Distribution bundle will copy all assets onto Azure Blob
 storage, versioned by the current build number. This way different assets between different
