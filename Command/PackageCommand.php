@@ -20,6 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
+use WindowsAzure\DistributionBundle\Deployment\BuildNumber;
+
 /**
  * Package a Symfony application for deployment.
  *
@@ -64,12 +66,13 @@ class PackageCommand extends ContainerAwareCommand
             $output->writeln('<info>Output directory created, because it didn\'t exist yet.</info>');
         }
         $outputDir = realpath($outputDir);
+        $kernelRoot = $this->getContainer()->getParameter('kernel.root_dir');
 
         if ( ! is_writeable($outputDir) ) {
             throw new \RuntimeException("Output-directory is not writable!");
         }
 
-        $buildNumber = $serviceDefinition->getNewBuildNumber();
+        $buildNumber = BuildNumber::createInDirectory($kernelRoot . "/config")->increment();
 
         $outputFile = $outputDir . "/azure-" . $buildNumber . ".cspkg";
         if (file_exists($outputFile)) {
@@ -89,7 +92,7 @@ class PackageCommand extends ContainerAwareCommand
         if ( ! $input->getOption('skip-role-file-generation')) {
             $output->writeln('Starting to compile role files for each physical directory.');
             $s = microtime(true);
-            $inputDir = $this->getContainer()->getParameter('kernel.root_dir') . '/../';
+            $inputDir = $kernelRoot . '/../';
             $serviceDefinition->createRoleFiles($inputDir, $outputFile);
             $output->writeln('..compiled role-files. (Took ' . number_format(microtime(true) - $s, 4) . ' seconds)');
         }

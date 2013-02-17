@@ -19,8 +19,8 @@ class AzureFilesystemTest extends BlobTestCase
             "azure://" . $containerName . "/foo/bar"
         ));
 
-        $this->assertTrue(file_exists("azure://". $containerName));
-        $this->assertTrue(file_exists("azure://" . $containerName . "/foo/bar"));
+        $this->assertTrue(file_exists("azure://". $containerName), "Container $containerName should exist after mkdir.");
+        $this->assertTrue(file_exists("azure://" . $containerName . "/foo/bar"), "Path $containerName/foo/bar should eixst.");
     }
 }
 

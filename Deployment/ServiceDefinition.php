@@ -14,7 +14,6 @@
 namespace WindowsAzure\DistributionBundle\Deployment;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Wraps the ServiceDefinition.csdef file and allows convenient access.
@@ -84,27 +83,6 @@ class ServiceDefinition
     public function getPath()
     {
         return $this->serviceDefinitionFile;
-    }
-
-    public function getNewBuildNumber()
-    {
-        $dir = dirname($this->getPath());
-        $buildFile = $dir . DIRECTORY_SEPARATOR . "build.number";
-        if (!file_exists($buildFile)) {
-            file_put_contents($buildFile, "0");
-        }
-        $buildNumber = (int)file_get_contents($buildFile);
-        $buildNumber++;
-        file_put_contents($buildFile, (string)$buildNumber);
-
-        // TODO: Refactor
-        $parametersAzureFile = $dir . "/../config/parameters_azure.yml";
-        $config = Yaml::parse($parametersAzureFile);
-        $config['parameters']['assets_azure_version'] = $buildNumber;
-        $yaml = Yaml::dump($config, 2);
-        file_put_contents($parametersAzureFile, $yaml);
-
-        return $buildNumber;
     }
 
     public function getWebRoleNames()
