@@ -45,7 +45,6 @@
         </service>
         <service id="windows_azure_distribution.assets.blob" class="%windows_azure_distribution.assets.blob.class%">
             <argument type="service" id="service_container" />
-            <argument type="service" id="windows_azure_distribution.assets.blob.storage" />
         </service>
     </services>
 </container>
