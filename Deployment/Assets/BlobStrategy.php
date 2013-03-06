@@ -32,11 +32,11 @@ class BlobStrategy extends AssetStrategy
      */
     private $client;
 
-    public function __construct($container, BlobRestProxy $client)
+    public function __construct($container)
     {
         parent::__construct($container);
 
-        $this->client = $client;
+        $this->client = $container->get('windows_azure_distribution.assets.blob.storage');
     }
 
     public function deploy($documentRoot, $buildNumber)

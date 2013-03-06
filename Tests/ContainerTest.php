@@ -69,6 +69,22 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('WindowsAzure\Blob\BlobRestProxy', $container->get('windows_azure.blob.test'));
     }
 
+    public function testAssets()
+    {
+        $config = array(
+            'services' => array(
+                'blob' => array(
+                    'test' => 'UseDevelopmentStorage=true',
+                ),
+            ),
+            'assets' => array('type' => 'blob', 'connection_name' => 'test')
+        );
+
+        $container = $this->createContainer($config);
+
+        $this->assertInstanceOf('WindowsAzure\DistributionBundle\Deployment\Assets\BlobStrategy', $container->get('windows_azure_distribution.assets'));
+    }
+
     public function testSessionStorage()
     {
         $config = array(
