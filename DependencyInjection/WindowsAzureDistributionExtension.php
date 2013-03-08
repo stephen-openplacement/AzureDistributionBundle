@@ -118,6 +118,7 @@ class WindowsAzureDistributionExtension extends Extension
     {
         switch ($assetConfig['type']) {
             case 'webrole':
+            case 'local':
                 $container->setAlias('windows_azure_distribution.assets', 'windows_azure_distribution.assets.webrole');
                 break;
             case 'blob':
@@ -128,6 +129,8 @@ class WindowsAzureDistributionExtension extends Extension
             case 'service':
                 $container->setAlias('windows_azure_distribution.assets', $assetConfig['id']);
                 break;
+            default:
+                throw new \InvalidArgumentException("Invalid asset strategy given in WindowsAzureDistribution Bundle, only local, blob or service are allowed.");
         }
     }
 
