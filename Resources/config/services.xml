@@ -16,7 +16,7 @@
         <parameter key="windows_azure_distribution.cache_warmer.dbtable.class">WindowsAzure\DistributionBundle\CacheWarmer\DbSessionTable</parameter>
         <parameter key="windows_azure_distribution.assets.local.class">WindowsAzure\DistributionBundle\Deployment\Assets\LocalStrategy</parameter>
         <parameter key="windows_azure_distribution.assets.blob.class">WindowsAzure\DistributionBundle\Deployment\Assets\BlobStrategy</parameter>
-        <parameter key="windows_azure_distribution.session_storage.pdo.class">Symfony\Component\HttpFoundation\SessionStorage\PdoSessionStorage</parameter>
+        <parameter key="windows_azure_distribution.session_handler.pdo.class">Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler</parameter>
 
         <parameter key="windows_azure_distribution.services_builder.class">WindowsAzure\Common\ServicesBuilder</parameter>
     </parameters>

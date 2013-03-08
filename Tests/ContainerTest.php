@@ -99,9 +99,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $container = $this->createContainer($config);
-        $def = $container->findDefinition('session.storage');
+        $def = $container->findDefinition('session.handler');
 
-        $this->assertEquals('%windows_azure_distribution.session_storage.pdo.class%', $def->getClass());
+        $this->assertEquals('%windows_azure_distribution.session_handler.pdo.class%', $def->getClass());
 
         $def = $container->findDefinition('windows_azure_distribution.session.pdo');
         $args = $def->getArguments();

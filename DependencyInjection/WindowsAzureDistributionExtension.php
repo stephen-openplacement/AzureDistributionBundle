@@ -157,14 +157,15 @@ class WindowsAzureDistributionExtension extends Extension
                 $definition->addMethodCall('setAttribute', array(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION));
                 $container->setDefinition('windows_azure_distribution.session.pdo', $definition);
 
-                $definition = new Definition('%windows_azure_distribution.session_storage.pdo.class%');
+                $definition = new Definition('%windows_azure_distribution.session_handler.pdo.class%');
                 $definition->setArguments(array(
                     new Reference('windows_azure_distribution.session.pdo'),
                     $container->getParameter('session.storage.options'),
                     array('db_table' => $sessionConfig['database']['table'])
                 ));
-                $container->setDefinition('windows_azure_distribution.session_storage', $definition);
-                $container->setAlias('session.storage', 'windows_azure_distribution.session_storage');
+
+                $container->setDefinition('windows_azure_distribution.session_handler', $definition);
+                $container->setAlias('session.handler', 'windows_azure_distribution.session_handler');
 
                 $definition = new Definition('%windows_azure_distribution.cache_warmer.dbtable.class%');
                 $definition->setArguments(array(
