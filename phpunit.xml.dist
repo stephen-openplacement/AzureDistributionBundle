@@ -6,6 +6,12 @@
         </testsuite>
     </testsuites>
 
+    <!--
+    <php>
+        <var name="AZURE_BLOB_CONNECTION" value="">
+    </php>
+    -->
+
     <filter>
         <whitelist>
             <directory>./</directory>
