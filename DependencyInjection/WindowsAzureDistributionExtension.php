@@ -119,7 +119,7 @@ class WindowsAzureDistributionExtension extends Extension
         switch ($assetConfig['type']) {
             case 'webrole':
             case 'local':
-                $container->setAlias('windows_azure_distribution.assets', 'windows_azure_distribution.assets.webrole');
+                $container->setAlias('windows_azure_distribution.assets', 'windows_azure_distribution.assets.local');
                 break;
             case 'blob':
                 $container->setAlias('windows_azure_distribution.assets.blob.storage', 'windows_azure.blob.' . $assetConfig['connection_name']);
