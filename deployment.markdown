@@ -57,10 +57,10 @@ Now modify your ``composer.json`` file to include a post install/update task:
 
     {
         "post-install-cmd": [
-            "WindowsAzure\DistributionBundle\Deployment\Composer\DeploymentListener::postInstall"
+            "WindowsAzure\\DistributionBundle\\Deployment\\Composer\\DeploymentListener::postInstall"
         ],
         "post-update-cmd": [
-            "WindowsAzure\DistributionBundle\Deployment\Composer\DeploymentListener::postInstall"
+            "WindowsAzure\\DistributionBundle\\Deployment\\Composer\\DeploymentListener::postInstall"
         ]
     }
 
