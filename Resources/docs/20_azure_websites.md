@@ -22,38 +22,13 @@ it to work with Git Deployment.
 
 ## Preparing
 
-Create a file called ``.deployment`` in the root directory of your project with the
-following contents:
+Call the following command in your project:
 
-    [config]
-    command = "D:\Program Files (x86)\PHP\v5.3\php.exe" build_azure.php
+    php src/console azure:websites:init
 
-If you are using PHP 5.4 in your Azure Website project, then use the following instead:
+You can modify the copied ".deployment" and "build_azure.sh" files to your needs.
 
-    [config]
-    command = "D:\Program Files (x86)\PHP\v5.4\php.exe" build_azure.php
-
-Create a second file called ``build_azure.php`` with the following contents:
-
-```php
-<?php
-if ( ! file_exists("composer.phar")) {
-    downloadComposer();
-}
-
-$_SERVER['argv'][1] = "install";
-$_SERVER['argv'][2] = "--prefer-dist";
-$_SERVER['argv'][3] = "-v";
-require "composer.phar";
-
-function downloadComposer()
-{
-    $url = 'https://getcomposer.org/composer.phar';
-    file_put_contents("composer.phar", file_get_contents($url));
-}
-```
-
-Now modify your ``composer.json`` file to include a post install/update task:
+Now open your ``composer.json`` file to include a post install/update task:
 
     {
         "post-install-cmd": [
