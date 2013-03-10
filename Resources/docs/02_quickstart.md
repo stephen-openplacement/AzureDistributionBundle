@@ -20,10 +20,10 @@ Prerequisites:
 
 2. Open up the terminal and go to the project root. Call "php app\console". You should see a list of commands, containing two of the windows azure commands at the bottom:
 
-        windowsazure:init
-        windowsazure:package
+        azure:cloud-services:init
+        azure:cloud-services:package
 
-3. Call `php app\console windowsazure:init`. The result should show that a Webrole was generated and display two passwords for the Remote Desktoping feature. Note down both passwords, you need them during deployment. If an error occurs during the key generation, take a look at the [OpenSSL](http://php.net/manual/en/openssl.installation.php) Installation notes.
+3. Call `php app\console azure:cloud-services:init`. The result should show that a Webrole was generated and display two passwords for the Remote Desktoping feature. Note down both passwords, you need them during deployment. If an error occurs during the key generation, take a look at the [OpenSSL](http://php.net/manual/en/openssl.installation.php) Installation notes.
 
 4. Configure the database by modifying `app\config\parameters_azure.yml`.
 
@@ -89,7 +89,7 @@ Prerequisites:
                     
     Note: Beware, Yaml only allows spaces no tabs and the correct indention is important.
 
-9. Call `php app\console windowsazure:package` which creates two files into the `build` directory of your project.
+9. Call `php app\console azure:cloud-services:package` which creates two files into the `build` directory of your project.
 
 10. Deploy the `build\ServiceDefinition.cscfg` and `build\azure-1.cspkg` using the management console. If the Remote Desktop keys were generated successfully, add the certifcate file from `app\azure\Sf2.Web.pfx` in the Certificate Tab.
 

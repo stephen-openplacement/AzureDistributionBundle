@@ -32,8 +32,8 @@ class InitCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('windowsazure:init')
-            ->setDescription('Initialize the basic necessary structure to deploy your Symfony project on Windows Azure')
+            ->setName('azure:cloud-services:init')
+            ->setDescription('Initialize the basic necessary structure to deploy your Symfony project on Windows Azure Cloud Services.')
         ;
     }
 

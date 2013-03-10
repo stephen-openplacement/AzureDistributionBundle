@@ -32,8 +32,8 @@ class PackageCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('windowsazure:package')
-            ->setDescription('Packages this symfony application for deployment on Windows Azure.')
+            ->setName('azure:cloud-services:package')
+            ->setDescription('Packages this symfony application for deployment on Windows Azure Cloud Services.')
             ->addOption('dev-fabric', null, InputOption::VALUE_NONE, 'Build package for dev-fabric? This will only copy the files and startup the Azure Simulator.')
             ->addOption('output-dir', null, InputOption::VALUE_REQUIRED, 'Output directory. Will override the default directory configured as approot/build.')
             ->addOption('skip-role-file-generation', null, InputOption::VALUE_NONE, 'Skip the generation of role files for the /roleFiles argument of cspack.exe. This will reuse old existing files.')

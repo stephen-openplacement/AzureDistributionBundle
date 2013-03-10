@@ -30,7 +30,7 @@ class AssetsDeployCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('windowsazure:deploy-assets')
+            ->setName('azure:deploy-assets')
             ->setDescription('Deploy assets on WindowsAzure Blob Storage for production.')
             ->addOption('increment-build', null, InputOption::VALUE_NONE, 'Increment the build number by one during this deployment.')
             ->addOption('build-number', null, InputOption::VALUE_REQUIRED, 'Set the build number to use during deployment.')
