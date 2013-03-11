@@ -20,4 +20,7 @@ PHP_PATH="D:\Program Files (x86)\PHP\v5.4"
 PATH="$PATH;$PHP_PATH";
 OPERATION="install"
 
+# Set Production Environment
+export SYMFONY_ENV=prod
+
 "D:\Program Files (x86)\PHP\v5.4\php.exe" composer.phar $OPERATION --prefer-dist -v

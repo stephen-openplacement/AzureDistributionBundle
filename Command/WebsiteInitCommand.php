@@ -39,5 +39,8 @@ class WebsiteInitCommand extends ContainerAwareCommand
 
         copy(__DIR__ . "/../Resources/private/websites/build_azure.sh", $kernelRoot . "/build_azure.sh");
         $output->writeln('[copy] build_azure.sh');
+
+        copy(__DIR__ . "/../Resources/private/websites/.user.ini", $kernelRoot . "/.user.ini");
+        $output->writeln('[copy] .user.ini');
     }
 }
