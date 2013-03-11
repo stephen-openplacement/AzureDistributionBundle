@@ -37,9 +37,11 @@ abstract class AzureKernel extends Kernel
     {
         parent::init();
 
-        $isAzure = isset( $_SERVER['RdRoleId'] );
-        if ($isAzure) {
+        if (isset($_SERVER['RdRoleId'])) {
             $this->tempDir = sys_get_temp_dir();
+        } else if (isset($_SERVER['DEPLOYMENT_TEMP'])) {
+            // Windows Azure Websites
+            $this->tempDir = $_SERVER['DEPLOYMENT_TEMP'];
         } else {
             $this->tempDir = $this->rootDir;
         }
