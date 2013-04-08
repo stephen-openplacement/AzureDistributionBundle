@@ -21,6 +21,7 @@ This guide explains:
 This guide requires you to have setup an Azure Website and configured
 it to work with Git Deployment.
 
+- [Installation of AzureDistributionBundle](http://beberlei.github.io/AzureDistributionBundle/installation.html)
 - [Azure Website with MySQL And Git](http://www.windowsazure.com/en-us/develop/php/tutorials/website-w-mysql-and-git/)
 
 ## Preparing
@@ -29,20 +30,39 @@ Call the following command in your project:
 
     php src/console azure:websites:init
 
+This creates two files ".deployment" and "build_azure.sh" into the root of your project.
+
 You should modify the copied ".deployment" and "build_azure.sh" files to your needs,
 for example you can add calls to ``php app/console doctrine:schema-tool:update --force``
 if you want to auto update your database schema.
 
-Commit the changes to all files to your Azure Git repository:
+Commit the files to your Azure Git repository:
 
     $ git add build_azure.sh .deployment
     $ git commit -m 'Enable Azure Websites Deployment'
+
+You also need to download the latest version of [Composer](http://getcomposer.org/)
+and commit the ``composer.phar`` file into your Git repository.
+
+## Configuration
+
+You can either commit the ``parameters.yml`` with all the production data to your
+Azure Git repository or use the [external parameters feature](http://symfony.com/doc/2.1/cookbook/configuration/external_parameters.html)
+to set the configuration variables in the Windows Azure Management console.
+
+Go to your website, "Configure" and then "app settings". Enter the environment
+variables there following the ``SYMFONY__`` pattern. Dots in the variable
+names of your ``parameter.yml`` translate to two underscores (``__``).
+
+<img src="http://beberlei.github.io/AzureDistributionBundle/assets/env.png" />
 
 ## Deloyment
 
 Whenever you push to your git repository now to the Azure Websites location,
 Kudo (the Git Deployment Engine of Azure Websites) will trigger the custom
 build command.
+
+    $ git push azure master
 
 ## Troubleshotting
 
