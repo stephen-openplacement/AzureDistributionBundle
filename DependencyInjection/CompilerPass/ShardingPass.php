@@ -63,7 +63,7 @@ class ShardingPass implements CompilerPassInterface
 
         $def->setArguments($args);
 
-        $shardDef = new Definition('Doctrine\Shards\DBAL\SQLAzure\SQLAzureShardManager');
+        $shardDef = new Definition('Doctrine\DBAL\Sharding\SQLAzure\SQLAzureShardManager');
         $shardDef->addArgument(new Reference($id));
         $container->setDefinition($shardId, $shardDef);
 
