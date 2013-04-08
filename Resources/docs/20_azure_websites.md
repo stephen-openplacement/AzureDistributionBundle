@@ -64,7 +64,7 @@ build command.
 
     $ git push azure master
 
-## Troubleshotting
+## Troubleshooting
 
 ### The website build failed, what now?
 
