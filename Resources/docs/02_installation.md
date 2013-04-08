@@ -16,7 +16,13 @@ The most simple way to use Azure Distribution Bundle is with [Composer](http://w
     {
         "require": {
             "beberlei/azure-distribution-bundle": "*"
-        }
+        },
+        "repositories": [
+            {
+                "type": "pear",
+                "url": "http://pear.php.net"
+            }
+        ],
     }
 
 Also you have to add the bundle in your kernel, see the next section on this.
