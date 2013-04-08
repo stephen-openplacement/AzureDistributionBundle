@@ -1,3 +1,8 @@
+---
+layout: default
+title: Deloyment on Windows Azure Websites
+---
+
 # Deloyment on Windows Azure Websites
 
     NOTE: This feature is still in development.
