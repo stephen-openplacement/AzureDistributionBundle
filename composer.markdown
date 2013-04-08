@@ -5,8 +5,6 @@ title: Deloyment on Windows Azure Websites
 
 # Deloyment on Windows Azure Websites
 
-    NOTE: This feature is still in development.
-
 With the June 2012 release Windows Azure includes Websites that allow you deploy projects
 from Git. It is much easier to deploy to than the Azure Cloud Services platform, which
 requires a lot of work on the build and deployment process.
