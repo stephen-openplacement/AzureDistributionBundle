@@ -15,7 +15,7 @@
         <exec output="assets.markdown" executable="git"><arg line="show master:Resources/docs/07_assets.md" /></exec>
         <exec output="logging.markdown" executable="git"><arg line="show master:Resources/docs/09_logging.md" /></exec>
         <exec output="troubleshooting.markdown" executable="git"><arg line="show master:Resources/docs/08_troubleshooting.md" /></exec>
-        <exec output="azure_websites.markdown" executable="git"><arg line="show master:Resources/docs/20_azure_websites.md" /></exec>
+        <exec output="composer.markdown" executable="git"><arg line="show master:Resources/docs/20_azure_websites.md" /></exec>
 
         <exec executable="git"><arg value="add" /><arg value="." /></exec>
         <exec executable="git"><arg value="commit" /><arg value="-m" /><arg value="Synchronize docs from master branch" /></exec>
