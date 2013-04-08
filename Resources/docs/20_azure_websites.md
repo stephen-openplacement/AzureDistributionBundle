@@ -1,6 +1,6 @@
 # Deloyment on Windows Azure Websites
 
-NOTE: This feature is still in development.
+    NOTE: This feature is still in development.
 
 With the June 2012 release Windows Azure includes Websites that allow you deploy projects
 from Git. It is much easier to deploy to than the Azure Cloud Services platform, which
@@ -26,36 +26,32 @@ Call the following command in your project:
 
     php src/console azure:websites:init
 
-You can modify the copied ".deployment" and "build_azure.sh" files to your needs.
+You should modify the copied ".deployment" and "build_azure.sh" files to your needs,
+for example you can add calls to ``php app/console doctrine:schema-tool:update --force``
+if you want to auto update your database schema.
 
-Now open your ``composer.json`` file to include a post install/update task:
+Commit the changes to all files to your Azure Git repository:
 
-    {
-        "post-install-cmd": [
-            "WindowsAzure\\DistributionBundle\\Deployment\\Composer\\DeploymentListener::postInstall"
-        ],
-        "post-update-cmd": [
-            "WindowsAzure\\DistributionBundle\\Deployment\\Composer\\DeploymentListener::postInstall"
-        ]
-    }
-
-The file might already hold the ``post-install-cmd`` and ``post-update-cmd`` keys. In that case
-append the two script callback values to the list of existing callbacks.
-
-Commit the changes to all three files to your Azure Git repository:
-
-    $ git add build_azure.php .deployment composer.json
+    $ git add build_azure.sh .deployment
     $ git commit -m 'Enable Azure Websites Deployment'
 
 ## Deloyment
 
 Whenever you push to your git repository now to the Azure Websites location,
 Kudo (the Git Deployment Engine of Azure Websites) will trigger the custom
-build command and:
+build command.
 
-1. Download composer.phar if not yet present. If you want to use a stable
-version, you should commit the ``composer.phar`` into the root of your project
-directory.
-2. Run ``php composer.phar install --prefer-dist -v``
-3. Run the deployment listener and copy all files into the Azure Websites web root.
+## Troubleshotting
 
+### The website build failed, what now?
+
+If the failure didnt happen during the kudu sync your website shouldn't be broken.
+You can just hit the "retry" button in the Windows Azure Management backend and deploy again.
+Should the failure happen during the kudu sync then your website might be in a broken state.
+Try to redeploy as soon as you can to fix potential problems.
+
+### A command failed during deployment, what now?
+
+You should carefully analyze what commands you run in the ``build_azure.sh`` file.
+There is no interaction possible and you should take care that your website always
+runs and no build step breaks it.
