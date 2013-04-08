@@ -8,10 +8,18 @@
         <parameter key="windows_azure_distribution.key_value_store.entity_manager.class">Doctrine\KeyValueStore\EntityManager</parameter>
         <parameter key="windows_azure_distribution.key_value_store.annotation_driver.class">Doctrine\KeyValueStore\Mapping\AnnotationDriver</parameter>
         <parameter key="windows_azure_distribution.key_value_store.storage.class">Doctrine\KeyValueStore\Storage\AzureSdkTableStorage</parameter>
+        <parameter key="windows_azure_distribution.key_value_store.configuration.class">Doctrine\KeyValueStore\Configuration</parameter>
     </parameters>
 
     <services>
         <service id="windows_azure_distribution.key_value_store.entity_manager" class="%windows_azure_distribution.key_value_store.entity_manager.class%">
+            <argument type="service" id="windows_azure_distribution.key_value_store.storage" />
+        </service>
+
+        <service id="windows_azure_distribution.key_value_store.configuration" class="%windows_azure_distribution.key_value_store.configuration.class%">
+            <call method="setMappingDriverImpl">
+                <argument type="service" id="windows_azure_distribution.key_value_store.annotation_driver" />
+            </call>
         </service>
 
         <service id="windows_azure_distribution.key_value_store.annotation_driver" class="%windows_azure_distribution.key_value_store.annotation_driver.class%">
