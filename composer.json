@@ -8,14 +8,8 @@
     ],
     "require": {
         "symfony/symfony": ">=2.1.0",
-        "microsoft/windowsazure": "dev-master"
+        "openplacement/windowsazure": "dev-master"
     },
-    "repositories": [
-        {
-            "type": "pear",
-            "url": "http://pear.php.net"
-        }
-    ],
     "autoload": {
         "psr-0": { "WindowsAzure\\DistributionBundle":"" }
     },
