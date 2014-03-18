@@ -1,5 +1,5 @@
 {
-    "name": "beberlei/azure-distribution-bundle",
+    "name": "openplacement/azure-distribution-bundle",
     "description": "Integration of Windows Azure SDK and workflows into Symfony applications.",
     "license": "MIT",
     "type": "symfony-bundle",
